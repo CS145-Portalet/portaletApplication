@@ -1,0 +1,17 @@
+<script lang="ts">
+	import '../app.css';
+	import { Navigation } from '@skeletonlabs/skeleton-svelte';
+
+	let { children } = $props();
+</script>
+
+<div></div>
+<div>
+	<Navigation.Bar>
+		<Navigation.Tile label="Home"></Navigation.Tile>
+		<Navigation.Tile label="Settings"></Navigation.Tile>	
+	</Navigation.Bar>
+</div>	
+
+
+{@render children()}
