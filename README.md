@@ -1,20 +1,33 @@
+# Common Commands We Will Be Using
+
+
+```bash
+npm run dev 
+# to run the project on your machine
+
+npm install
+# installs dependencies (may need this)
+
+npx prettier --write . 
+# run every so often. just reformats the code to be more readable 
+```
+
+# Please Please Please
+
+Do NOT push directly to the main branch! Make your own feature branch first, then (when very very sure na OK na feature mo) create a pull request and ping Thea.
+
+Try to use conventional commits (https://www.conventionalcommits.org/en/v1.0.0/)
+
+
+
 # Svelte library
 
 Everything you need to build a Svelte library, powered by [`sv`](https://npmjs.com/package/sv).
 
 Read more about creating a library [in the docs](https://svelte.dev/docs/kit/packaging).
 
-## Creating a project
+(NOTE FROM THEA: Skeleton docs here https://www.skeleton.dev/docs)
 
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
-```
 
 ## Developing
 
@@ -23,7 +36,7 @@ Once you've created a project and installed dependencies with `npm install` (or 
 ```bash
 npm run dev
 
-# or start the server and open the app in a new browser tab
+# or start the server and open the app in a new browser tab (NOTE FROM THEA: we wont use this one)
 npm run dev -- --open
 ```
 
@@ -56,3 +69,5 @@ To publish your library to [npm](https://www.npmjs.com):
 ```bash
 npm publish
 ```
+
+
