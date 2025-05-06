@@ -6,7 +6,7 @@ npm run dev
 # to run the project on your machine
 
 npm install
-# installs dependencies (may need this)
+# installs dependencies (need this upon initial pull)
 
 npx prettier --write . 
 # run every so often. just reformats the code to be more readable 
