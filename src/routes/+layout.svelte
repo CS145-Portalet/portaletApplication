@@ -9,9 +9,8 @@
 <div>
 	<Navigation.Bar>
 		<Navigation.Tile label="Home"></Navigation.Tile>
-		<Navigation.Tile label="Settings"></Navigation.Tile>	
+		<Navigation.Tile label="Settings"></Navigation.Tile>
 	</Navigation.Bar>
-</div>	
-
+</div>
 
 {@render children()}
