@@ -1,15 +1,13 @@
 export type device={
-    id:string;
-    nickname:string;
-    streetAddress:string;
     city:string;
-    status:number;
-    createdAt:number;
+    created_at:number;
+    nickname:string;
+    street_address:string;
+    
+   
 }
 
 export type deviceLog={
-    id:string;
-    deviceID:string;
     status:string;
-    createdAt:number;
+    created_at:number;
 }

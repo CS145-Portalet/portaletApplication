@@ -1,42 +1,56 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { collection, query, onSnapshot } from 'firebase/firestore';
 	import { goto } from '$app/navigation';
+	import type { device } from '../../types.js';
+	import { db } from '$lib/firebase.js';
 
-	// Sample data
-	const devices = [
-		{
-			id: 'dev1',
-			name: 'Sensor Alpha',
-			status: 'Online',
-			address: '123 Main St',
-			city: 'Metropolis',
-			createdAt: '2025-05-01'
-		},
-		{
-			id: 'dev2',
-			name: 'Camera Beta',
-			status: 'Offline',
-			address: '456 Oak Ave',
-			city: 'Gotham',
-			createdAt: '2025-04-22'
-		}
-	];
+	// Initially populated with sample data
+	let deviceArray: device[] = [];
+
+	onMount(() => {
+		const q = query(collection(db, "device"));
+		const unsubscribe = onSnapshot(q, (querySnapshot) => {
+			const updatedDevices: device[] = [];
+			querySnapshot.forEach((doc) => {
+				updatedDevices.push(doc.data() as device);
+			});
+			deviceArray = updatedDevices; // Replace sample with Firestore data
+			console.log("Fetched from Firestore", deviceArray);
+		});
+
+		return () => unsubscribe();
+	});
 
 	function goToDevice(id: string) {
 		goto(`/deviceTable/${id}`);
 	}
 </script>
 
-<h1>Device Table Tester</h1>
+<style>
+	table {
+		border-collapse: collapse;
+		width: 100%;
+		table-layout: fixed; /* enables wrapping */
+	}
 
+	th, td {
+		border: 2px solid #000;
+		padding: 12px;
+		white-space: normal; /* allow wrapping */
+		word-wrap: break-word;
+	}
 
-
-
-
-<table border="1" cellpadding="8" cellspacing="0">
+	/* Optional: limit column width */
+	td:nth-child(1), td:nth-child(2) {
+		max-width: 200px;
+	}
+</style>
+<table border="4" cellpadding="20" cellspacing="5">
 	<thead>
+		<tr><th>Device Table</th></tr>
 		<tr>
 			<th>Device Name</th>
-			<th>Status</th>
 			<th>Street Address</th>
 			<th>City</th>
 			<th>Created At</th>
@@ -44,18 +58,21 @@
 		</tr>
 	</thead>
 	<tbody>
-		{#each devices as device}
+		{#each deviceArray as device}
 			<tr>
-				<td>{device.name}</td>
-				<td>{device.status}</td>
-				<td>{device.address}</td>
+				<td>{device.nickname}</td>
+				<td>{device.street_address}</td>
 				<td>{device.city}</td>
-				<td>{device.createdAt}</td>
+				<td>{device.created_at}</td>
 				<td>
-					<button on:click={() => goToDevice(device.id)}>
+					<button on:click={() => goToDevice(device.nickname)}>
 						View
 					</button>
+					<button>
+						Force Update
+					</button>
 				</td>
+				
 			</tr>
 		{/each}
 	</tbody>
