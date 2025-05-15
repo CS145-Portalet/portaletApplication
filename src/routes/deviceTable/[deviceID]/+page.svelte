@@ -1,27 +1,54 @@
 <script lang="ts">
 	export let data: { deviceId: string };
 	import { onMount } from 'svelte';
-	import { collection, query, onSnapshot } from 'firebase/firestore';
-	import { goto } from '$app/navigation';
+	import { collection, query, where ,onSnapshot,doc, getDoc } from 'firebase/firestore';
 	import type { deviceLog } from '../../../types.js';
 	import { db } from '$lib/firebase.js';
+    import { numberToUTC } from '$lib/utils.js';
+	const statusMap: Record<number, string> = {
+		0: 'Dry/No Water',
+		1: 'Low',
+		2: 'Medium',
+		3: 'High Water Level',
+		};
 
-	// Initially populated with sample data
+	let deviceNickname = '';
 	let logArray: deviceLog[] = [];
 
-	onMount(() => {
-		const q = query(collection(db, "device"));
-		const unsubscribe = onSnapshot(q, (querySnapshot) => {
-			const updatedLog: deviceLog[] = [];
-			querySnapshot.forEach((doc) => {
-				updatedLog.push(doc.data() as deviceLog);
-			});
-			logArray = updatedLog; // Replace sample with Firestore data
-			console.log("Fetched from Firestore", logArray);
-		});
 
-		return () => unsubscribe();
+	onMount(() => {
+		const run = async () => {
+			const docQuery = doc(db, "device", data.deviceId);
+			const deviceTgt = await getDoc(docQuery);
+
+			if (deviceTgt.exists()) {
+				const deviceData = deviceTgt.data();
+				deviceNickname = deviceData.nickname ?? 'Unknown Device';
+			} else {
+				deviceNickname = 'Device Not Found';
+			}
+
+			const q = query(collection(doc(db, "device", data.deviceId), "device_log"));
+			const unsubscribe = onSnapshot(q, (querySnapshot) => {
+				const updatedLog: deviceLog[] = [];
+				querySnapshot.forEach((doc) => {
+					updatedLog.push(doc.data() as deviceLog);
+				});
+				logArray = updatedLog;
+				console.log("Fetched from Firestore dev log", logArray);
+			});
+
+			// Return the unsubscribe cleanup when async work is done
+			cleanup = unsubscribe;
+		};
+
+		let cleanup = () => {};
+
+		run();
+
+		return () => cleanup(); // must be synchronous
 	});
+
 
 </script>
 
@@ -47,7 +74,9 @@
 
 <table>
 	<thead>
-		<tr><th>Device Log - Viewing Device: {data.deviceId}</th></tr>
+		<tr><th colspan="3" style="text-align: center; font-size: 1.2em;">
+			Device Log — Viewing Device: {deviceNickname}
+		</th></tr>
 		<tr>
 			<th>Status</th>
 			<th>Created_at</th>
@@ -57,8 +86,8 @@
 	<tbody>
 		{#each logArray as deviceLog}
 			<tr>
-				<td>{deviceLog.status}</td>
-				<td>{deviceLog.created_at}</td>
+				<td>{statusMap[deviceLog.status_int]} ({deviceLog.status_int})</td>
+				<td>{numberToUTC(deviceLog.created_at)}</td>
 				<td>
 					<button>Delete</button>
 				</td>

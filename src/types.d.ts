@@ -1,4 +1,5 @@
 export type device={
+    device_id:string;
     city:string;
     created_at:number;
     nickname:string;
@@ -8,6 +9,6 @@ export type device={
 }
 
 export type deviceLog={
-    status:string;
+    status_int:number;
     created_at:number;
 }
