@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { collection, query, onSnapshot } from 'firebase/firestore';
+	import { collection, query, onSnapshot, deleteDoc } from 'firebase/firestore';
 	import { goto } from '$app/navigation';
 	import type { device } from '../../types.js';
 	import { db } from '$lib/firebase.js';
     import { numberToUTC } from '$lib/utils.js';
+	import { _deleteDevice } from './+page.js';
 	// Initially populated with sample data
 	let deviceArray: device[] = [];
 
@@ -50,11 +51,12 @@
 </style>
 <table border="4" cellpadding="20" cellspacing="5">
 	<thead>
-		<tr><th colspan="5" style="text-align: center; font-size: 1.2em;">
+		<tr><th colspan="6" style="text-align: center; font-size: 1.2em;">
 			Device Table
 		</th></tr>
 		<tr>
 			<th>Device Name</th>
+			<th>Device Status</th>
 			<th>Street Address</th>
 			<th>City</th>
 			<th>Created At</th>
@@ -65,6 +67,7 @@
 		{#each deviceArray as device}
 			<tr>
 				<td>{device.nickname}</td>
+				<td>ID</td>
 				<td>{device.street_address}</td>
 				<td>{device.city}</td>
 				<td>{numberToUTC(device.created_at)}</td>
@@ -72,8 +75,11 @@
 					<button on:click={() => goToDevice(device.device_id)}>
 						View
 					</button>
-					<button>
+					<button >
 						Force Update
+					</button>
+					<button on:click={()=>_deleteDevice(device.device_id)}>
+						Delete (Inactive)
 					</button>
 				</td>
 				
