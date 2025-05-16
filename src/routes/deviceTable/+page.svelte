@@ -16,7 +16,7 @@
 				updatedDevices.push({...doc.data(),device_id:doc.id} as device);
 			});
 			deviceArray = updatedDevices; // Replace sample with Firestore data
-			console.log("Fetched from Firestore", deviceArray);
+			//console.log("Fetched from Firestore", deviceArray);
 		});
 
 		return () => unsubscribe();

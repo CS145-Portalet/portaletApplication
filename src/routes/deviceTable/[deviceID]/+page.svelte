@@ -14,7 +14,6 @@
 
 	let deviceNickname = '';
 	let logArray: deviceLog[] = [];
-	console.log(data.deviceId);
 
 
 	onMount(() => {
@@ -36,7 +35,7 @@
 					updatedLog.push(doc.data() as deviceLog);
 				});
 				logArray = updatedLog;
-				console.log("Fetched from Firestore dev log", logArray);
+				//console.log("Fetched from Firestore dev log", logArray);
 			});
 
 			// Return the unsubscribe cleanup when async work is done
