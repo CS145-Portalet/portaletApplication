@@ -4,6 +4,8 @@
 	import { goto } from '$app/navigation';
     import { doc, addDoc,collection } from 'firebase/firestore';
     import { db } from '$lib/firebase.js';
+    export let data: { deviceId: string };
+    console.log(data)
 
 	let deviceNickname: string;
 	let deviceCity: string;
@@ -11,9 +13,11 @@
 	let deviceStreetAddress: string;
 	let loading = false;
 
+    async function editDevice(){
 
+    }
 	
-
+/*
 	async function createDevice() {
 		if (deviceNickname === undefined && deviceCity === undefined|| deviceNickname===""&&deviceCity==="" ||   loading === true)
 			return alert('Fields cannot be empty');
@@ -47,7 +51,7 @@
 		}
 		loading = false
 	}
-
+*/
 	
 </script>
 
@@ -94,9 +98,9 @@
 
 			<button
 				disabled={loading}
-				on:click={createDevice}
+				on:click={editDevice}
 				class="py-2 px-8 bg-white text-black mt-8 disabled:bg-white/25 disabled:cursor-not-allowed"
-				>{loading ? 'Creating' : 'Create'}</button
+				>{loading ? 'Editing' : 'Edit'}</button
 			>
 		</div>
 	</div>

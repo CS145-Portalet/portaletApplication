@@ -14,6 +14,7 @@
 
 	let deviceNickname = '';
 	let logArray: deviceLog[] = [];
+	console.log(data.deviceId);
 
 
 	onMount(() => {

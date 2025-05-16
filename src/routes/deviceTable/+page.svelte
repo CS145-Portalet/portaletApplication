@@ -25,6 +25,9 @@
 	function goToDevice(id: string) {
 		goto(`/deviceTable/${id}`);
 	}
+	function editDevice(id: string) {
+		goto(`/deviceTable/${id}/editDevice`);
+	}
 
 
 </script>
@@ -72,8 +75,8 @@
 					<button on:click={() => goToDevice(device.device_id)}>
 						View
 					</button>
-					<button>
-						Force Update
+					<button on:click={() => editDevice(device.device_id)}>
+						Edit
 					</button>
 				</td>
 				
