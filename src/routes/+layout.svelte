@@ -8,8 +8,9 @@
 <div></div>
 <div>
 	<Navigation.Bar>
-		<Navigation.Tile label="Home"></Navigation.Tile>
-		<Navigation.Tile label="Settings"></Navigation.Tile>
+		<Navigation.Tile label="Home"  href="/"></Navigation.Tile>
+		<Navigation.Tile label="Device Table" href="/deviceTable"></Navigation.Tile>
+		<Navigation.Tile label="Add Device" href = "/addDevice"></Navigation.Tile>
 	</Navigation.Bar>
 </div>
 
