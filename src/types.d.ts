@@ -8,8 +8,9 @@ export type device={
    
 }
 
+
 export type deviceLog={
-    log_id:string
+    log_id:string;
     status_int:number;
     created_at:number;
 }

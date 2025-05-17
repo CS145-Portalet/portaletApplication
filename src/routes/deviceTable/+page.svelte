@@ -1,12 +1,14 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { collection, query, onSnapshot,getDocs } from 'firebase/firestore';
+
+	import { collection, query, onSnapshot,getDocs,deleteDoc } from 'firebase/firestore';
 	import { goto } from '$app/navigation';
 	import type { device, deviceLog } from '../../types.js';
 	import { db } from '$lib/firebase.js';
-    import { numberToUTC } from '$lib/utils.js';
-	import {statusMap} from '$lib/constants.js'
+   import { numberToUTC } from '$lib/utils.js';
 
+	import {statusMap} from '$lib/constants.js'
+	import { _deleteDevice } from './+page.js';
 
 	// Initially populated with sample data
 	let deviceArray: device[] = [];
@@ -92,6 +94,7 @@
 		</th></tr>
 		<tr>
 			<th>Device Name</th>
+
 			<th>Status</th>
 			<th>Street Address</th>
 			<th>City</th>
@@ -111,8 +114,13 @@
 					<button on:click={() => goToDevice(device.device_id)}>
 						View
 					</button>
+
 					<button on:click={() => editDevice(device.device_id)}>
 						Edit
+
+					</button>
+					<button on:click={()=>_deleteDevice(device.device_id)}>
+						Delete (Inactive)
 					</button>
 				</td>
 				
