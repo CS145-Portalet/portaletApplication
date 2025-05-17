@@ -36,7 +36,7 @@
 					updatedLog.push({...doc.data(),log_id:doc.id} as deviceLog);
 				});
 				logArray = updatedLog;
-				console.log("Fetched from Firestore dev log", logArray);
+				//console.log("Fetched from Firestore dev log", logArray);
 			});
 
 			// Return the unsubscribe cleanup when async work is done
