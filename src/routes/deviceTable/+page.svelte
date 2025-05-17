@@ -16,7 +16,7 @@
 				updatedDevices.push({...doc.data(),device_id:doc.id} as device);
 			});
 			deviceArray = updatedDevices; // Replace sample with Firestore data
-			console.log("Fetched from Firestore", deviceArray);
+			//console.log("Fetched from Firestore", deviceArray);
 		});
 
 		return () => unsubscribe();
@@ -24,6 +24,9 @@
 
 	function goToDevice(id: string) {
 		goto(`/deviceTable/${id}`);
+	}
+	function editDevice(id: string) {
+		goto(`/deviceTable/${id}/editDevice`);
 	}
 
 
@@ -72,8 +75,8 @@
 					<button on:click={() => goToDevice(device.device_id)}>
 						View
 					</button>
-					<button>
-						Force Update
+					<button on:click={() => editDevice(device.device_id)}>
+						Edit
 					</button>
 				</td>
 				
