@@ -10,15 +10,17 @@ export function load({ params }) {
 }
 
 
-export async function _deleteDevice(id: string) {
-	console.log(id);
+export async function _deleteLog(devID: string, logId:string) {
 	
 	if (!confirm('Are you sure you want to delete this device?')) return;
+	console.log("Deleting",logId);
+	
 
 	try {
-		const deviceRef = doc(db, 'device', id);
-		await deleteDoc(deviceRef);
-		console.log(`Device ${id} deleted successfully`);
+		const logRef = doc(db, 'device', devID,'device_log',logId);
+		console.log(logRef.path)
+		await deleteDoc(logRef);
+		console.log(`Device ${devID} deleted successfully`);
 	} catch (error) {
 		console.error('Error deleting device:', error);
 		alert('Failed to delete device');

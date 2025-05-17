@@ -5,6 +5,7 @@
 	import type { deviceLog } from '../../../types.js';
 	import { db } from '$lib/firebase.js';
     import { numberToUTC } from '$lib/utils.js';
+	import { _deleteLog } from './+page.js';
 	const statusMap: Record<number, string> = {
 		0: 'Dry/No Water',
 		1: 'Low',
@@ -32,7 +33,7 @@
 			const unsubscribe = onSnapshot(q, (querySnapshot) => {
 				const updatedLog: deviceLog[] = [];
 				querySnapshot.forEach((doc) => {
-					updatedLog.push(doc.data() as deviceLog);
+					updatedLog.push({...doc.data(),log_id:doc.id} as deviceLog);
 				});
 				logArray = updatedLog;
 				console.log("Fetched from Firestore dev log", logArray);
@@ -89,7 +90,8 @@
 				<td>{statusMap[deviceLog.status_int]} ({deviceLog.status_int})</td>
 				<td>{numberToUTC(deviceLog.created_at)}</td>
 				<td>
-					<button>Delete</button>
+					<button on:click={()=>_deleteLog(data.deviceId,deviceLog.log_id)}>
+						Delete</button>
 				</td>
 			</tr>
 		{/each}
