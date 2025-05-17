@@ -4,14 +4,10 @@
 	import { collection, query, where ,onSnapshot,doc, getDoc } from 'firebase/firestore';
 	import type { deviceLog } from '../../../types.js';
 	import { db } from '$lib/firebase.js';
-    import { numberToUTC } from '$lib/utils.js';
+  import { numberToUTC } from '$lib/utils.js';
+	import {statusMap} from '$lib/constants.js'
 	import { _deleteLog } from './+page.js';
-	const statusMap: Record<number, string> = {
-		0: 'Dry/No Water',
-		1: 'Low',
-		2: 'Medium',
-		3: 'High Water Level',
-		};
+
 
 	let deviceNickname = '';
 	let logArray: deviceLog[] = [];
@@ -35,8 +31,11 @@
 				querySnapshot.forEach((doc) => {
 					updatedLog.push({...doc.data(),log_id:doc.id} as deviceLog);
 				});
-				logArray = updatedLog;
-				//console.log("Fetched from Firestore dev log", logArray);
+
+				const sortedLogsDesc = updatedLog.sort((a, b) => b.created_at - a.created_at);
+				logArray = sortedLogsDesc;
+				console.log("Fetched from Firestore dev log", logArray);
+
 			});
 
 			// Return the unsubscribe cleanup when async work is done

@@ -1,23 +1,58 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { collection, query, onSnapshot, deleteDoc } from 'firebase/firestore';
+
+	import { collection, query, onSnapshot,getDocs,deleteDoc } from 'firebase/firestore';
 	import { goto } from '$app/navigation';
-	import type { device } from '../../types.js';
+	import type { device, deviceLog } from '../../types.js';
 	import { db } from '$lib/firebase.js';
-    import { numberToUTC } from '$lib/utils.js';
+   import { numberToUTC } from '$lib/utils.js';
+
+	import {statusMap} from '$lib/constants.js'
 	import { _deleteDevice } from './+page.js';
+
 	// Initially populated with sample data
 	let deviceArray: device[] = [];
 
 	onMount(() => {
 		const q = query(collection(db, "device"));
 		const unsubscribe = onSnapshot(q, (querySnapshot) => {
-			const updatedDevices: device[] = [];
-			querySnapshot.forEach((doc) => {
-				updatedDevices.push({...doc.data(),device_id:doc.id} as device);
-			});
-			deviceArray = updatedDevices; // Replace sample with Firestore data
-			//console.log("Fetched from Firestore", deviceArray);
+
+			console.log('hello there');
+			(async()=>{
+				try {
+					console.log('general kenobi');
+					const updatedDevices: device[] = [];
+					for (const doc of querySnapshot.docs){
+						
+						const deviceData = { ...doc.data(), device_id: doc.id } as device;
+						
+						const logsSnapshot = await getDocs(collection(doc.ref, "device_log"));
+						const deviceLogs: deviceLog[]=[];
+						if (!logsSnapshot.empty) {
+							logsSnapshot.forEach((doc)=>{
+								deviceLogs.push({
+									...doc.data(),
+									log_id: doc.id} as deviceLog
+								);
+									
+							})
+						}
+						const sortedLogsDesc = deviceLogs.sort((a, b) => b.created_at - a.created_at);
+
+						const latestStatus=sortedLogsDesc[0]===undefined? 4:sortedLogsDesc[0].status_int;
+						console.log(latestStatus);
+						
+						updatedDevices.push({...deviceData,latest_status:latestStatus});
+					}
+					deviceArray=updatedDevices;
+					console.log("Devices with latest logs:", deviceArray);
+				}catch (error)
+				{
+					console.error("Error fetching latest logs:", error);
+				}
+				
+			})();
+
 		});
 
 		return () => unsubscribe();
@@ -59,7 +94,8 @@
 		</th></tr>
 		<tr>
 			<th>Device Name</th>
-			<th>Device Status</th>
+
+			<th>Status</th>
 			<th>Street Address</th>
 			<th>City</th>
 			<th>Created At</th>
@@ -70,7 +106,7 @@
 		{#each deviceArray as device}
 			<tr>
 				<td>{device.nickname}</td>
-				<td>ID</td>
+				<td>{statusMap[device.latest_status]}</td>
 				<td>{device.street_address}</td>
 				<td>{device.city}</td>
 				<td>{numberToUTC(device.created_at)}</td>

@@ -4,7 +4,10 @@ export type device={
     created_at:number;
     nickname:string;
     street_address:string;
+    latest_status:number
+   
 }
+
 
 export type deviceLog={
     log_id:string;
