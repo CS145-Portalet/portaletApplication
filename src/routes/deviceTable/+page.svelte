@@ -16,32 +16,37 @@
 		const unsubscribe = onSnapshot(q, (querySnapshot) => {
 			console.log('hello there');
 			(async()=>{
-				console.log('general kenobi');
-				const updatedDevices: device[] = [];
-				for (const doc of querySnapshot.docs){
-					
-					const deviceData = { ...doc.data(), device_id: doc.id } as device;
+				try {
+					console.log('general kenobi');
+					const updatedDevices: device[] = [];
+					for (const doc of querySnapshot.docs){
+						
+						const deviceData = { ...doc.data(), device_id: doc.id } as device;
+						
+						const logsSnapshot = await getDocs(collection(doc.ref, "device_log"));
+						const deviceLogs: deviceLog[]=[];
+						if (!logsSnapshot.empty) {
+							logsSnapshot.forEach((doc)=>{
+								deviceLogs.push({
+									...doc.data(),
+									log_id: doc.id} as deviceLog
+								);
+									
+							})
+						}
+						const sortedLogsDesc = deviceLogs.sort((a, b) => b.created_at - a.created_at);
 
-					const logsSnapshot = await getDocs(collection(doc.ref, "device_log"));
-					const deviceLogs: deviceLog[]=[];
-					if (!logsSnapshot.empty) {
-						logsSnapshot.forEach((doc)=>{
-							deviceLogs.push({
-								...doc.data(),
-								log_id: doc.id} as deviceLog
-							);
-								
-						})
+						const latestStatus=sortedLogsDesc[0]===undefined? 4:sortedLogsDesc[0].status_int;
+						console.log(latestStatus);
+						
+						updatedDevices.push({...deviceData,latest_status:latestStatus});
 					}
-					const sortedLogsDesc = deviceLogs.sort((a, b) => b.created_at - a.created_at);
-
-					const latestStatus=sortedLogsDesc[0]===undefined? 4:sortedLogsDesc[0].status_int;
-					console.log(latestStatus);
-					
-					updatedDevices.push({...deviceData,latest_status:latestStatus});
+					deviceArray=updatedDevices;
+					console.log("Devices with latest logs:", deviceArray);
+				}catch (error)
+				{
+					console.error("Error fetching latest logs:", error);
 				}
-				deviceArray=updatedDevices;
-				console.log("Devices with latest logs:", deviceArray);
 				
 			})();
 		});
