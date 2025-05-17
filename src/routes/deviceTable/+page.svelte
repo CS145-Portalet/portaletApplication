@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { collection, query, onSnapshot } from 'firebase/firestore';
+	import { collection, query, onSnapshot, getDocs } from 'firebase/firestore';
 	import { goto } from '$app/navigation';
 	import type { device } from '../../types.js';
 	import { db } from '$lib/firebase.js';
@@ -13,6 +13,7 @@
 		const unsubscribe = onSnapshot(q, (querySnapshot) => {
 			const updatedDevices: device[] = [];
 			querySnapshot.forEach((doc) => {
+				const logSnapshot =  getDocs
 				updatedDevices.push({...doc.data(),device_id:doc.id} as device);
 			});
 			deviceArray = updatedDevices; // Replace sample with Firestore data
@@ -50,11 +51,12 @@
 </style>
 <table border="4" cellpadding="20" cellspacing="5">
 	<thead>
-		<tr><th colspan="5" style="text-align: center; font-size: 1.2em;">
+		<tr><th colspan="6" style="text-align: center; font-size: 1.2em;">
 			Device Table
 		</th></tr>
 		<tr>
 			<th>Device Name</th>
+			<th>Status</th>
 			<th>Street Address</th>
 			<th>City</th>
 			<th>Created At</th>
@@ -65,6 +67,7 @@
 		{#each deviceArray as device}
 			<tr>
 				<td>{device.nickname}</td>
+				<td>status</td>
 				<td>{device.street_address}</td>
 				<td>{device.city}</td>
 				<td>{numberToUTC(device.created_at)}</td>

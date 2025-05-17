@@ -34,7 +34,8 @@
 				querySnapshot.forEach((doc) => {
 					updatedLog.push(doc.data() as deviceLog);
 				});
-				logArray = updatedLog;
+				const sortedLogsDesc = updatedLog.sort((a, b) => b.created_at - a.created_at);
+				logArray = sortedLogsDesc;
 				console.log("Fetched from Firestore dev log", logArray);
 			});
 
