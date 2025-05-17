@@ -5,12 +5,8 @@
 	import type { deviceLog } from '../../../types.js';
 	import { db } from '$lib/firebase.js';
     import { numberToUTC } from '$lib/utils.js';
-	const statusMap: Record<number, string> = {
-		0: 'Dry/No Water',
-		1: 'Low',
-		2: 'Medium',
-		3: 'High Water Level',
-		};
+	import {statusMap} from '$lib/constants.js'
+
 
 	let deviceNickname = '';
 	let logArray: deviceLog[] = [];
