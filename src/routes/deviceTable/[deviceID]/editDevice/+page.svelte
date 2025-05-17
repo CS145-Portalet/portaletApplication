@@ -2,18 +2,41 @@
 
 <script lang="ts">
 	import { goto } from '$app/navigation';
-    import { doc, addDoc,collection } from 'firebase/firestore';
+    import { doc, updateDoc, } from 'firebase/firestore';
     import { db } from '$lib/firebase.js';
 
-	let deviceNickname: string;
-	let deviceCity: string;
-	let deviceCreatedDate: number;
-	let deviceStreetAddress: string;
+    
+    export let data;
+    console.log(data);
+    let pageTitle:string=data.device.nickname;
+    let deviceID = data.deviceID;
+	let deviceNickname: string=data.device.nickname;
+	let deviceCity: string=data.device.city;
+	let deviceCreatedDate: number=data.device.created_at;
+	let deviceStreetAddress: string=data.device.street_address;
 	let loading = false;
 
+    async function editDevice(){
+        
+        
+        const deviceRef = doc(db, 'device', deviceID);
+        const deviceInfo = {
+			nickname: deviceNickname,
+			city: deviceCity,
+			street_address: deviceStreetAddress ,
+            created_at :deviceCreatedDate 
 
+		};
+        console.log(deviceRef.path);
+        
+        await updateDoc(deviceRef, deviceInfo);
+        console.log(deviceInfo);
+        
+        goto('/deviceTable');
+
+    }
 	
-
+/*
 	async function createDevice() {
 		if (deviceNickname === undefined && deviceCity === undefined|| deviceNickname===""&&deviceCity==="" ||   loading === true)
 			return alert('Fields cannot be empty');
@@ -47,7 +70,7 @@
 		}
 		loading = false
 	}
-
+*/
 	
 </script>
 
@@ -55,7 +78,7 @@
 	<div>
 		<!-- Input box -->
 		<div class="max-w-4xl mx-auto bg-secondary rounded-lg flex flex-col p-5">
-			<h1 class="text-center text-white text-2xl">Create New Device</h1>
+			<h1 class="text-center text-white text-2xl">Edit Device {pageTitle}</h1>
 
 			<div class="flex flex-col my-4">
 				<label for="event-name">Device Nickname</label>
@@ -94,9 +117,9 @@
 
 			<button
 				disabled={loading}
-				on:click={createDevice}
+				on:click={editDevice}
 				class="py-2 px-8 bg-white text-black mt-8 disabled:bg-white/25 disabled:cursor-not-allowed"
-				>{loading ? 'Creating' : 'Create'}</button
+				>{loading ? 'Editing' : 'Edit'}</button
 			>
 		</div>
 	</div>

@@ -14,6 +14,7 @@
 	onMount(() => {
 		const q = query(collection(db, "device"));
 		const unsubscribe = onSnapshot(q, (querySnapshot) => {
+
 			console.log('hello there');
 			(async()=>{
 				try {
@@ -49,6 +50,7 @@
 				}
 				
 			})();
+
 		});
 
 		return () => unsubscribe();
@@ -56,6 +58,9 @@
 
 	function goToDevice(id: string) {
 		goto(`/deviceTable/${id}`);
+	}
+	function editDevice(id: string) {
+		goto(`/deviceTable/${id}/editDevice`);
 	}
 
 
@@ -106,8 +111,8 @@
 					<button on:click={() => goToDevice(device.device_id)}>
 						View
 					</button>
-					<button>
-						Force Update
+					<button on:click={() => editDevice(device.device_id)}>
+						Edit
 					</button>
 				</td>
 				

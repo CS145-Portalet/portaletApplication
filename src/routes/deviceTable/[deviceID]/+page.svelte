@@ -30,9 +30,11 @@
 				querySnapshot.forEach((doc) => {
 					updatedLog.push(doc.data() as deviceLog);
 				});
+
 				const sortedLogsDesc = updatedLog.sort((a, b) => b.created_at - a.created_at);
 				logArray = sortedLogsDesc;
 				console.log("Fetched from Firestore dev log", logArray);
+
 			});
 
 			// Return the unsubscribe cleanup when async work is done
