@@ -1,15 +1,14 @@
 # Common Commands We Will Be Using
 
-
 ```bash
-npm run dev 
+npm run dev
 # to run the project on your machine
 
 npm install
 # installs dependencies (need this upon initial pull)
 
-npx prettier --write . 
-# run every so often. just reformats the code to be more readable 
+npx prettier --write .
+# run every so often. just reformats the code to be more readable
 ```
 
 # Please Please Please
@@ -18,8 +17,6 @@ Do NOT push directly to the main branch! Make your own feature branch first, the
 
 Try to use conventional commits (https://www.conventionalcommits.org/en/v1.0.0/)
 
-
-
 # Svelte library
 
 Everything you need to build a Svelte library, powered by [`sv`](https://npmjs.com/package/sv).
@@ -27,7 +24,6 @@ Everything you need to build a Svelte library, powered by [`sv`](https://npmjs.c
 Read more about creating a library [in the docs](https://svelte.dev/docs/kit/packaging).
 
 (NOTE FROM THEA: Skeleton docs here https://www.skeleton.dev/docs)
-
 
 ## Developing
 
@@ -69,5 +65,3 @@ To publish your library to [npm](https://www.npmjs.com):
 ```bash
 npm publish
 ```
-
-
