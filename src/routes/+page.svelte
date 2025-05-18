@@ -3,7 +3,7 @@
 
 	import { collection, query, onSnapshot, getDocs, deleteDoc } from 'firebase/firestore';
 	import { goto } from '$app/navigation';
-	import type { device, deviceLog } from '../../types.js';
+	import type { device, deviceLog } from '../types.js';
 	import { db } from '$lib/firebase.js';
 	import { numberToUTC } from '$lib/utils.js';
 
