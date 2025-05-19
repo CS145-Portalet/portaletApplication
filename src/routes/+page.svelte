@@ -37,7 +37,7 @@
 						const sortedLogsDesc = deviceLogs.sort((a, b) => b.created_at - a.created_at);
 
 						const latestStatus = sortedLogsDesc[0] === undefined ? 4 : sortedLogsDesc[0].status_int;
-						console.log(latestStatus);
+						//console.log(latestStatus);
 
 						updatedDevices.push({ ...deviceData, latest_status: latestStatus });
 					}
@@ -85,7 +85,7 @@
 					<button on:click={() => goToDevice(device.device_id)}> View </button>
 
 					<button on:click={() => editDevice(device.device_id)}> Edit </button>
-					<button on:click={() => _deleteDevice(device.device_id)}> Delete (Inactive) </button>
+					<!--<button on:click={() => _deleteDevice(device.device_id)}> Delete (Inactive) </button>-->
 				</td>
 			</tr>
 		{/each}
