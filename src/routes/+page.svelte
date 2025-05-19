@@ -53,10 +53,10 @@
 	});
 
 	function goToDevice(id: string) {
-		goto(`/deviceTable/${id}`);
+		goto(`${id}`);
 	}
 	function editDevice(id: string) {
-		goto(`/deviceTable/${id}/editDevice`);
+		goto(`${id}/editDevice`);
 	}
 </script>
 
