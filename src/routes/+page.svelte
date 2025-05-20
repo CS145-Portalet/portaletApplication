@@ -12,6 +12,7 @@
 
 	// Initially populated with sample data
 	let deviceArray: device[] = [];
+	let filteredEntries: device[] = [];
 
 	onMount(() => {
 		const q = query(collection(db, 'device'));
@@ -42,6 +43,7 @@
 						updatedDevices.push({ ...deviceData, latest_status: latestStatus });
 					}
 					deviceArray = updatedDevices;
+					filteredEntries = deviceArray;
 					console.log('Devices with latest logs:', deviceArray);
 				} catch (error) {
 					console.error('Error fetching latest logs:', error);
@@ -58,7 +60,25 @@
 	function editDevice(id: string) {
 		goto(`${id}/editDevice`);
 	}
+
+	let searchTerm = "";
+	const searchEntries = () => {	
+		return filteredEntries = deviceArray.filter(device => {
+			let deviceName = device.nickname.toLowerCase();
+			return deviceName.includes(searchTerm.toLowerCase())
+		});
+	}
 </script>
+
+<div id="search-input-cont">
+	<input type="text" 
+		id="search-field" 
+		placeholder="Search by Name" 
+		autocomplete="off"
+		bind:value={searchTerm}
+		on:input={searchEntries} 
+	/>
+</div> 
 
 <table border="4" cellpadding="20" cellspacing="5">
 	<thead>
@@ -74,7 +94,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		{#each deviceArray as device}
+		{#each filteredEntries as device}
 			<tr>
 				<td>{device.nickname}</td>
 				<td>{statusMap[device.latest_status]}</td>
@@ -105,6 +125,23 @@
 		padding: 12px;
 		white-space: normal; /* allow wrapping */
 		word-wrap: break-word;
+	}
+
+	#search-input-cont {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		margin-right: 10px;
+		justify-content: end;
+	}
+
+	#search-field {
+		width: 40%;
+		font-size: 1.3rem;
+		border: 1px solid gray;
+		border-radius: 5px;
+		padding: 8px;
+		margin: 10px;
 	}
 
 	/* Optional: limit column width */
