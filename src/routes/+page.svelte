@@ -168,7 +168,7 @@
 
 {/if}
 
-<table border="4" cellpadding="20" cellspacing="5">
+<!-- <table border="4" cellpadding="20" cellspacing="5">
 	<tbody>
 		{#each deviceArray as device}
 			<tr>
@@ -181,7 +181,6 @@
 					<button on:click={() => goToDevice(device.device_id)}> View </button>
 
 					<button on:click={() => editDevice(device.device_id)}> Edit </button>
-					<!--<button on:click={() => _deleteDevice(device.device_id)}> Delete (Inactive) </button>-->
 				</td>
 			</tr>
 		{/each}
@@ -208,4 +207,4 @@
 	td:nth-child(2) {
 		max-width: 200px;
 	}
-</style>
+</style> -->
