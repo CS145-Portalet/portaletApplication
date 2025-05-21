@@ -1,5 +1,5 @@
 [data-theme='portalet'] {
-	--text-scaling: 1.125;
+	--text-scaling: 1.067;
 	--base-font-color: var(--color-surface-950);
 	--base-font-color-dark: var(--color-surface-50);
 	--base-font-family: system-ui, sans-serif;
@@ -27,11 +27,11 @@
 	--anchor-text-decoration-active: none;
 	--anchor-text-decoration-focus: none;
 	--spacing: 0.25rem;
-	--radius-base: 0.75rem;
+	--radius-base: 9999rem;
 	--radius-container: 0.75rem;
 	--default-border-width: 4px;
 	--default-divide-width: 2px;
-	--default-ring-width: 1px;
+	--default-ring-width: 2px;
 	--body-background-color: var(--color-surface-50);
 	--body-background-color-dark: var(--color-surface-950);
 	--color-primary-50: oklch(82.37% 0.09 229.39deg);

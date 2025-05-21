@@ -2,7 +2,7 @@
 	export let data: { deviceId: string };
 	import { onMount } from 'svelte';
 	import { collection, query, where, onSnapshot, doc, getDoc } from 'firebase/firestore';
-	import type { deviceLog } from '../../../types.js';
+	import type { deviceLog } from '../../types.js';
 	import { db } from '$lib/firebase.js';
 	import { numberToUTC } from '$lib/utils.js';
 	import { statusMap } from '$lib/constants.js';
