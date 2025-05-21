@@ -66,7 +66,7 @@
 */
 </script>
 
-<main class="mt-10 text-gray-100">
+<main class="mt-10">
 	<div>
 		<!-- Input box -->
 		<div class="bg-secondary mx-auto flex max-w-4xl flex-col rounded-lg p-5">

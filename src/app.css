@@ -5,4 +5,7 @@
 @import '@skeletonlabs/skeleton/optional/presets';
 @import '@skeletonlabs/skeleton/themes/catppuccin';
 
+@import '../portalet.css';
+
 @source '../node_modules/@skeletonlabs/skeleton-svelte/dist';
+@custom-variant dark (&:where(.dark, .dark *));

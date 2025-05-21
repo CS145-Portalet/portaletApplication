@@ -10,6 +10,9 @@
 	import { statusMap } from '$lib/constants.js';
 	import { _deleteDevice } from './+page.js';
 
+    import WaterDrop from '@lucide/svelte/icons/droplet';
+    import MapIcon from '@lucide/svelte/icons/map-pinned';
+
 	// Initially populated with sample data
 	let deviceArray: device[] = [];
 	let filteredEntries: device[] = [];
@@ -68,6 +71,19 @@
 			return deviceName.includes(searchTerm.toLowerCase())
 		});
 	}
+
+	function WaterColor(level: string){
+		if (level == "High"){
+			return "Red"
+		}
+		else if (level == "Medium"){
+			return "Yellow"
+		}
+		else if (level == "No Data"){
+			return "Gray"
+		}
+		else {return "Green"}
+	}
 </script>
 
 <div id="search-input-cont">
@@ -80,21 +96,101 @@
 	/>
 </div> 
 
-<table border="4" cellpadding="20" cellspacing="5">
-	<thead>
-		<tr><th colspan="6" style="text-align: center; font-size: 1.2em;"> Device Table </th></tr>
-		<tr>
-			<th>Device Name</th>
+{#if deviceArray.length==0}
+	<!-- loading eme-->
+    <div class="card preset-outlined-primary-500 mx-3 my-3 p-4">
+		<div class="flex items-center justify-center space-x-4 my-3">
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+		</div>
+	</div>
+	<div class="card preset-outlined-primary-500 mx-3 my-3 p-4">
+		<div class="flex items-center justify-center space-x-4 my-3">
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+		</div>
+	</div>
+	<div class="card preset-outlined-primary-500 mx-3 my-3 p-4">
+		<div class="flex items-center justify-center space-x-4 my-3">
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+		</div>
+	</div>
+	<div class="card preset-outlined-primary-500 mx-3 my-3 p-4">
+		<div class="flex items-center justify-center space-x-4 my-3">
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+		</div>
+	</div>
+	<div class="card preset-outlined-primary-500 mx-3 my-3 p-4">
+		<div class="flex items-center justify-center space-x-4 my-3">
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+		</div>
+	</div>
+{:else}
+    <div class="w-full">
+    {#each deviceArray as device}
+        <div class="card preset-outlined-primary-500 mx-3 my-3 p-4">
+            <div class="flex justify-items-stretch">
+				<div class="grow">
+					<p  class="font-medium text-xl mb-1">
+						{device.nickname} 
+					</p>
+					<p class="text-sm text-gray-400 mb-2"> 
+                		<span class="flex">
+							<span class="mr-2"><MapIcon strokeWidth={1.5} size={20}/></span>
+							{device.street_address}, {device.city}
+						</span>
+            		</p>
+				</div>
+				<WaterDrop 
+					fill={WaterColor(statusMap[device.latest_status])}
+					strokeWidth={0}
+					size={30}
+				/>
+			</div>
+            
+            <button on:click={() => goToDevice(device.device_id)} class="text-xs text-primary-950 font-medium"> ...view portalet logs </button>
+        </div>
+    {/each}
+    </div>
 
-			<th>Status</th>
-			<th>Street Address</th>
-			<th>City</th>
-			<th>Created At</th>
-			<th>Actions</th>
-		</tr>
-	</thead>
+{/if}
+
+<!-- <table border="4" cellpadding="20" cellspacing="5">
 	<tbody>
-		{#each filteredEntries as device}
+		{#each deviceArray as device}
 			<tr>
 				<td>{device.nickname}</td>
 				<td>{statusMap[device.latest_status]}</td>
@@ -105,7 +201,6 @@
 					<button on:click={() => goToDevice(device.device_id)}> View </button>
 
 					<button on:click={() => editDevice(device.device_id)}> Edit </button>
-					<!--<button on:click={() => _deleteDevice(device.device_id)}> Delete (Inactive) </button>-->
 				</td>
 			</tr>
 		{/each}
@@ -113,19 +208,7 @@
 </table>
 
 <style>
-	table {
-		border-collapse: collapse;
-		width: 100%;
-		table-layout: fixed; /* enables wrapping */
-	}
 
-	th,
-	td {
-		border: 2px solid #000;
-		padding: 12px;
-		white-space: normal; /* allow wrapping */
-		word-wrap: break-word;
-	}
 
 	#search-input-cont {
 		width: 100%;
@@ -143,10 +226,4 @@
 		padding: 8px;
 		margin: 10px;
 	}
-
-	/* Optional: limit column width */
-	td:nth-child(1),
-	td:nth-child(2) {
-		max-width: 200px;
-	}
-</style>
+</style> -->
