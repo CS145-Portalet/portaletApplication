@@ -6,7 +6,6 @@
 @import '@skeletonlabs/skeleton/themes/catppuccin';
 
 @import '../portalet.css';
-@import '@fontsource/poppins';
 
 @source '../node_modules/@skeletonlabs/skeleton-svelte/dist';
 @custom-variant dark (&:where(.dark, .dark *));
