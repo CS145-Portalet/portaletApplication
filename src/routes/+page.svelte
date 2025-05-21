@@ -187,6 +187,26 @@
     </div>
 
 {/if}
+
+<!-- <table border="4" cellpadding="20" cellspacing="5">
+	<tbody>
+		{#each deviceArray as device}
+			<tr>
+				<td>{device.nickname}</td>
+				<td>{statusMap[device.latest_status]}</td>
+				<td>{device.street_address}</td>
+				<td>{device.city}</td>
+				<td>{numberToUTC(device.created_at)}</td>
+				<td>
+					<button on:click={() => goToDevice(device.device_id)}> View </button>
+
+					<button on:click={() => editDevice(device.device_id)}> Edit </button>
+				</td>
+			</tr>
+		{/each}
+	</tbody>
+</table>
+
 <style>
 
 
@@ -206,4 +226,4 @@
 		padding: 8px;
 		margin: 10px;
 	}
-</style>
+</style> -->
