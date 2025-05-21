@@ -5,13 +5,13 @@
 	import { goto } from '$app/navigation';
 	import type { device, deviceLog } from '../types.js';
 	import { db } from '$lib/firebase.js';
-	import { numberToUTC } from '$lib/utils.js';
 
 	import { statusMap } from '$lib/constants.js';
 	import { _deleteDevice } from './+page.js';
 
     import WaterDrop from '@lucide/svelte/icons/droplet';
     import MapIcon from '@lucide/svelte/icons/map-pinned';
+	import SearchIcon from '@lucide/svelte/icons/search';
 
 	// Initially populated with sample data
 	let deviceArray: device[] = [];
@@ -86,15 +86,16 @@
 	}
 </script>
 
-<div id="search-input-cont">
+<div class="flex grid-cols-[auto_1fr_auto] space-y-4 mx-3 align-middle items-center bg-secondary-500 p-2 rounded-full">
 	<input type="text" 
+		class="w-full border-0 outline-hidden ml-2 text-primary-700"
 		id="search-field" 
 		placeholder="Search by Name" 
 		autocomplete="off"
 		bind:value={searchTerm}
 		on:input={searchEntries} 
 	/>
-</div> 
+</div>
 
 {#if deviceArray.length==0}
 	<!-- loading eme-->
@@ -181,13 +182,23 @@
 				/>
 			</div>
             
-            <button on:click={() => goToDevice(device.device_id)} class="text-xs text-primary-950 font-medium"> ...view portalet logs </button>
+			<div class="flex justify-items-stretch">
+				<div class="grow">
+            		<button on:click={() => goToDevice(device.device_id)} class="text-xs text-primary-950 font-medium"> ...view portalet logs </button>
+				</div>
+
+			</div>
         </div>
     {/each}
     </div>
 
 {/if}
 
+<style>
+	#search-field {
+		border: 0px;
+	}
+</style>
 <!-- <table border="4" cellpadding="20" cellspacing="5">
 	<tbody>
 		{#each deviceArray as device}
@@ -207,23 +218,4 @@
 	</tbody>
 </table>
 
-<style>
-
-
-	#search-input-cont {
-		width: 100%;
-		display: flex;
-		align-items: center;
-		margin-right: 10px;
-		justify-content: end;
-	}
-
-	#search-field {
-		width: 40%;
-		font-size: 1.3rem;
-		border: 1px solid gray;
-		border-radius: 5px;
-		padding: 8px;
-		margin: 10px;
-	}
 </style> -->
