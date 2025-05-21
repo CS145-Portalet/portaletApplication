@@ -161,7 +161,7 @@
 	</div>
 {:else}
     <div class="w-full">
-    {#each deviceArray as device}
+    {#each filteredEntries as device}
         <div class="card preset-outlined-primary-500 mx-3 my-3 p-4">
             <div class="flex justify-items-stretch">
 				<div class="grow">
@@ -194,11 +194,7 @@
 
 {/if}
 
-<style>
-	#search-field {
-		border: 0px;
-	}
-</style>
+
 <!-- <table border="4" cellpadding="20" cellspacing="5">
 	<tbody>
 		{#each deviceArray as device}
