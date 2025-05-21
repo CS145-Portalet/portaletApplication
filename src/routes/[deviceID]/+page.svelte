@@ -1,7 +1,15 @@
 <script lang="ts">
 	export let data: { deviceId: string };
 	import { onMount } from 'svelte';
-	import { collection, query, where, onSnapshot, doc, getDoc, type DocumentData } from 'firebase/firestore';
+	import {
+		collection,
+		query,
+		where,
+		onSnapshot,
+		doc,
+		getDoc,
+		type DocumentData
+	} from 'firebase/firestore';
 	import type { device, deviceLog } from '../../types.js';
 	import { db } from '$lib/firebase.js';
 	import { numberToUTC } from '$lib/utils.js';
@@ -10,7 +18,7 @@
 	import { goto } from '$app/navigation';
 
 	import WaterDrop from '@lucide/svelte/icons/droplet';
-    import MapIcon from '@lucide/svelte/icons/map-pinned';
+	import MapIcon from '@lucide/svelte/icons/map-pinned';
 	import Arrow from '@lucide/svelte/icons/arrow-left';
 	import FilterIcon from '@lucide/svelte/icons/funnel';
 
@@ -20,7 +28,7 @@
 	let deviceStatus = 0;
 	let deviceCreatedDate = 0;
 	let logArray: deviceLog[] = [];
-	let deviceID='';
+	let deviceID = '';
 
 	const filters = ['filter 1', 'filter 2', 'filter 3'];
 	let status = '';
@@ -29,14 +37,13 @@
 		const run = async () => {
 			const docQuery = doc(db, 'device', data.deviceId);
 			const deviceTgt = await getDoc(docQuery);
-			deviceID=deviceTgt.id;
+			deviceID = deviceTgt.id;
 			if (deviceTgt.exists()) {
 				const deviceData = deviceTgt.data();
 				deviceNickname = deviceData.nickname ?? 'Unknown Device';
 				deviceStreet = deviceData.street_address;
 				deviceCity = deviceData.city;
 				deviceCreatedDate = deviceData.created_at;
-
 			} else {
 				deviceNickname = 'Device Not Found';
 			}
@@ -69,93 +76,91 @@
 		goto(`${id}/editDevice`);
 	}
 
-	function WaterColor(level: number){
-		if (level == 3){
-			return "Red"
+	function WaterColor(level: number) {
+		if (level == 3) {
+			return 'Red';
+		} else if (level == 2) {
+			return 'Yellow';
+		} else if (logArray.length == 0) {
+			return 'Gray';
+		} else {
+			return 'Green';
 		}
-		else if (level == 2){
-			return "Yellow"
-		}
-		else if (logArray.length == 0){
-			return "Gray"
-		}
-		else {return "Green"}
 	}
 
 	function filterColor(selectedFilter: string) {
-		if (status==selectedFilter){
+		if (status == selectedFilter) {
 			status = '';
 		} else {
-		status = selectedFilter;
+			status = selectedFilter;
 		}
 	}
 </script>
 
 <div>
-	<a href="/" class="flex ml-3"><Arrow size={25}/></a>
+	<a href="/" class="ml-3 flex"><Arrow size={25} /></a>
 </div>
 
-{#if deviceNickname==""}
-		<div class="flex items-center justify-center space-x-4 my-3">
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse hidden sm:block"></div>
-			<div class="placeholder-circle size-16 animate-pulse hidden sm:block"></div>
-			<div class="placeholder-circle size-16 animate-pulse hidden sm:block"></div>
-		</div>
+{#if deviceNickname == ''}
+	<div class="my-3 flex items-center justify-center space-x-4">
+		<div class="placeholder-circle size-16 animate-pulse"></div>
+		<div class="placeholder-circle size-16 animate-pulse"></div>
+		<div class="placeholder-circle size-16 animate-pulse"></div>
+		<div class="placeholder-circle size-16 animate-pulse"></div>
+		<div class="placeholder-circle size-16 animate-pulse"></div>
+		<div class="placeholder-circle hidden size-16 animate-pulse sm:block"></div>
+		<div class="placeholder-circle hidden size-16 animate-pulse sm:block"></div>
+		<div class="placeholder-circle hidden size-16 animate-pulse sm:block"></div>
+	</div>
 {:else}
 	<div class="card preset-outlined-primary-500 mx-3 my-3 p-4">
 		<div class="flex justify-items-stretch">
 			<div class="grow">
-				<p  class="font-medium text-xl mb-1">
-					{deviceNickname} 
+				<p class="mb-1 text-xl font-medium">
+					{deviceNickname}
 				</p>
-				<p class="text-sm text-gray-400 mb-2"> 
+				<p class="mb-2 text-sm text-gray-400">
 					<span class="flex">
-						<span class="mr-2"><MapIcon strokeWidth={1.5} size={20}/></span>
+						<span class="mr-2"><MapIcon strokeWidth={1.5} size={20} /></span>
 						{deviceStreet}, {deviceCity}
 					</span>
 				</p>
 			</div>
-			<WaterDrop 
-				fill={WaterColor(deviceStatus)}
-				strokeWidth={0}
-				size={30}
-			/>
+			<WaterDrop fill={WaterColor(deviceStatus)} strokeWidth={0} size={30} />
 		</div>
-				
+
 		<div class="flex justify-items-stretch">
-			<div class="grow text-xs text-primary-800 font-medium grow">
+			<div class="text-primary-950 grow grow text-xs font-medium">
 				Registered {numberToUTC(deviceCreatedDate)}
 			</div>
-			<button 
+			<button
 				type="button"
 				class="btn btn-sm preset-filled-primary-500 italic"
-				onclick={() => editDevice(deviceID)}> 
-				Edit 
+				onclick={() => editDevice(deviceID)}
+			>
+				Edit
 			</button>
-		</div>    
+		</div>
 	</div>
-	
 {/if}
 
-<div class = "mx-3 mb-2 items-center gap-4 flex">
+<div class="mx-3 mb-2 flex items-center gap-4">
 	<FilterIcon fill="#0170f3" strokeWidth={0} />
 	{#each filters as filter}
-		<button type="button" class={`chip capitalize ${status === filter ? 'preset-filled-tertiary-500' : 'preset-filled-secondary-500'} `} 
-			onclick={() => filterColor(filter)}>
+		<button
+			type="button"
+			class={`chip capitalize ${status === filter ? 'preset-filled-tertiary-500' : 'preset-filled-secondary-500'} `}
+			onclick={() => filterColor(filter)}
+		>
 			{filter}
 		</button>
 	{/each}
 </div>
 
-{#if (logArray.length==0)}
-	<div class="space-y-4 w-full">
+{#if logArray.length == 0}
+	<div class="w-full space-y-4">
 		<div class="placeholder animate-pulse"></div>
-    	<div class="placeholder animate-pulse"></div>
+		<div class="placeholder animate-pulse"></div>
 		<div class="placeholder animate-pulse"></div>
 		<div class="placeholder animate-pulse"></div>
 		<div class="placeholder animate-pulse"></div>

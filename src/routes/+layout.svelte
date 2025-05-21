@@ -5,15 +5,11 @@
 	import CirclePlus from '@lucide/svelte/icons/circle-plus';
 
 	let { children } = $props();
-
 </script>
 
 <AppBar spaceY="align-middle" background="color-surface-50">
 	{#snippet lead()}
-		<a href="/" class="hidden sm:block">
-			logo 
-		</a>
-
+		<a href="/" class="hidden sm:block"> logo </a>
 	{/snippet}
 
 	{#snippet trail()}
@@ -24,4 +20,3 @@
 </AppBar>
 
 {@render children()}
-	

@@ -47,8 +47,6 @@
 	}
 </script>
 
-
-
 <div class="mx-auto flex max-w-4xl flex-col rounded-lg p-5">
 	<h1 class="text-center text-2xl">Create New Device</h1>
 
@@ -92,4 +90,3 @@
 		>{loading ? 'Creating' : 'Create'}
 	</button>
 </div>
-
