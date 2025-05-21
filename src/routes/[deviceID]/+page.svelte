@@ -7,9 +7,11 @@
 	import { numberToUTC } from '$lib/utils.js';
 	import { statusMap } from '$lib/constants.js';
 	import { _deleteLog } from './+page.js';
+	import { goto } from '$app/navigation';
 
 	import WaterDrop from '@lucide/svelte/icons/droplet';
     import MapIcon from '@lucide/svelte/icons/map-pinned';
+
 
 	let deviceNickname = '';
 	let deviceStreet = '';
@@ -17,12 +19,12 @@
 	let deviceStatus = 0;
 	let deviceCreatedDate = 0;
 	let logArray: deviceLog[] = [];
-
+	let deviceID='';
 	onMount(() => {
 		const run = async () => {
 			const docQuery = doc(db, 'device', data.deviceId);
 			const deviceTgt = await getDoc(docQuery);
-
+			deviceID=deviceTgt.id;
 			if (deviceTgt.exists()) {
 				const deviceData = deviceTgt.data();
 				deviceNickname = deviceData.nickname ?? 'Unknown Device';
@@ -57,6 +59,10 @@
 
 		return () => cleanup(); // must be synchronous
 	});
+
+	function editDevice(id: string) {
+		goto(`${id}/editDevice`);
+	}
 
 	function WaterColor(level: number){
 		if (level == 3){
@@ -98,6 +104,7 @@
 		</div>
 	</div>    
 </div>
+<button on:click={() => editDevice(deviceID)}> Edit </button>
 
 <table>
 	<thead>
