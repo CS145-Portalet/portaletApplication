@@ -7,15 +7,16 @@
 	import { numberToUTC } from '$lib/utils.js';
 	import { statusMap } from '$lib/constants.js';
 	import { _deleteLog } from './+page.js';
+	import { goto } from '$app/navigation';
 
 	let deviceNickname = '';
 	let logArray: deviceLog[] = [];
-
+	let deviceID='';
 	onMount(() => {
 		const run = async () => {
 			const docQuery = doc(db, 'device', data.deviceId);
 			const deviceTgt = await getDoc(docQuery);
-
+			deviceID=deviceTgt.id;
 			if (deviceTgt.exists()) {
 				const deviceData = deviceTgt.data();
 				deviceNickname = deviceData.nickname ?? 'Unknown Device';
@@ -45,7 +46,12 @@
 
 		return () => cleanup(); // must be synchronous
 	});
+
+	function editDevice(id: string) {
+		goto(`${id}/editDevice`);
+	}
 </script>
+<button on:click={() => editDevice(deviceID)}> Edit </button>
 
 <table>
 	<thead>
