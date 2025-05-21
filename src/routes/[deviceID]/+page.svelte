@@ -11,7 +11,8 @@
 
 	import WaterDrop from '@lucide/svelte/icons/droplet';
     import MapIcon from '@lucide/svelte/icons/map-pinned';
-
+	import Arrow from '@lucide/svelte/icons/arrow-left';
+	import FilterIcon from '@lucide/svelte/icons/funnel';
 
 	let deviceNickname = '';
 	let deviceStreet = '';
@@ -20,6 +21,10 @@
 	let deviceCreatedDate = 0;
 	let logArray: deviceLog[] = [];
 	let deviceID='';
+
+	const filters = ['filter 1', 'filter 2', 'filter 3'];
+	let status = '';
+
 	onMount(() => {
 		const run = async () => {
 			const docQuery = doc(db, 'device', data.deviceId);
@@ -29,7 +34,7 @@
 				const deviceData = deviceTgt.data();
 				deviceNickname = deviceData.nickname ?? 'Unknown Device';
 				deviceStreet = deviceData.street_address;
-				deviceCity = deviceData.City;
+				deviceCity = deviceData.city;
 				deviceCreatedDate = deviceData.created_at;
 
 			} else {
@@ -76,43 +81,98 @@
 		}
 		else {return "Green"}
 	}
+
+	function filterColor(selectedFilter: string) {
+		if (status==selectedFilter){
+			status = '';
+		} else {
+		status = selectedFilter;
+		}
+	}
 </script>
 
-<div class="card preset-outlined-primary-500 mx-3 my-3 p-4">
-    <div class="flex justify-items-stretch">
-		<div class="grow">
-			<p  class="font-medium text-xl mb-1">
-				{deviceNickname} 
-			</p>
-			<p class="text-sm text-gray-400 mb-2"> 
-           		<span class="flex">
-					<span class="mr-2"><MapIcon strokeWidth={1.5} size={20}/></span>
-					{deviceStreet}, {deviceCity}
-				</span>
-       		</p>
-		</div>
-		<WaterDrop 
-			fill={WaterColor(deviceStatus)}
-			strokeWidth={0}
-			size={30}
-		/>
-	</div>
-            
-	<div class="flex justify-items-stretch">
-		<div class="grow text-xs text-primary-950 font-medium">
-       		Registered {numberToUTC(deviceCreatedDate)}
-		</div>
-	</div>    
+<div>
+	<a href="/" class="flex ml-3"><Arrow size={25}/></a>
 </div>
-<button on:click={() => editDevice(deviceID)}> Edit </button>
+
+{#if deviceNickname==""}
+		<div class="flex items-center justify-center space-x-4 my-3">
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse hidden sm:block"></div>
+			<div class="placeholder-circle size-16 animate-pulse hidden sm:block"></div>
+			<div class="placeholder-circle size-16 animate-pulse hidden sm:block"></div>
+		</div>
+{:else}
+	<div class="card preset-outlined-primary-500 mx-3 my-3 p-4">
+		<div class="flex justify-items-stretch">
+			<div class="grow">
+				<p  class="font-medium text-xl mb-1">
+					{deviceNickname} 
+				</p>
+				<p class="text-sm text-gray-400 mb-2"> 
+					<span class="flex">
+						<span class="mr-2"><MapIcon strokeWidth={1.5} size={20}/></span>
+						{deviceStreet}, {deviceCity}
+					</span>
+				</p>
+			</div>
+			<WaterDrop 
+				fill={WaterColor(deviceStatus)}
+				strokeWidth={0}
+				size={30}
+			/>
+		</div>
+				
+		<div class="flex justify-items-stretch">
+			<div class="grow text-xs text-primary-800 font-medium grow">
+				Registered {numberToUTC(deviceCreatedDate)}
+			</div>
+			<button 
+				type="button"
+				class="btn btn-sm preset-filled-primary-500 italic"
+				onclick={() => editDevice(deviceID)}> 
+				Edit 
+			</button>
+		</div>    
+	</div>
+	
+{/if}
+
+<div class = "mx-3 mb-2 items-center gap-4 flex">
+	<FilterIcon fill="#0170f3" strokeWidth={0} />
+	{#each filters as filter}
+		<button type="button" class={`chip capitalize ${status === filter ? 'preset-filled-tertiary-500' : 'preset-filled-secondary-500'} `} 
+			onclick={() => filterColor(filter)}>
+			{filter}
+		</button>
+	{/each}
+</div>
+
+{#if (logArray.length==0)}
+	<div class="space-y-4 w-full">
+		<div class="placeholder animate-pulse"></div>
+    	<div class="placeholder animate-pulse"></div>
+		<div class="placeholder animate-pulse"></div>
+		<div class="placeholder animate-pulse"></div>
+		<div class="placeholder animate-pulse"></div>
+		<div class="placeholder animate-pulse"></div>
+		<div class="placeholder animate-pulse"></div>
+		<div class="placeholder animate-pulse"></div>
+		<div class="placeholder animate-pulse"></div>
+		<div class="placeholder animate-pulse"></div>
+	</div>
+{:else}
+	{#each logArray as deviceLog}
+		<div><!--to display device logs here insead of table--></div>
+	{/each}
+{/if}
 
 <table>
 	<thead>
-		<tr
-			><th colspan="3" style="text-align: center; font-size: 1.2em;">
-				Device Log — Viewing Device: {deviceNickname}
-			</th></tr
-		>
 		<tr>
 			<th>Status</th>
 			<th>Created_at</th>
@@ -125,7 +185,7 @@
 				<td>{statusMap[deviceLog.status_int]} ({deviceLog.status_int})</td>
 				<td>{numberToUTC(deviceLog.created_at)}</td>
 				<td>
-					<button on:click={() => _deleteLog(data.deviceId, deviceLog.log_id)}> Delete</button>
+					<button onclick={() => _deleteLog(data.deviceId, deviceLog.log_id)}> Delete</button>
 				</td>
 			</tr>
 		{/each}

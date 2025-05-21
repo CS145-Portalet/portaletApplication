@@ -17,10 +17,7 @@
 	{/snippet}
 
 	{#snippet trail()}
-		<a href="/addDevice" type="button" class="btn btn-sm preset-filled-primary-500 hidden sm:flex" >
-			<CirclePlus /><p class="font-semibold">Add Device</p>
-		</a>
-		<a href="/addDevice" type="button" class="btn preset-filled-primary block sm:hidden">
+		<a href="/addDevice" type="button" class="bg-surface-200 rounded-full p-1">
 			<CirclePlus />
 		</a>
 	{/snippet}

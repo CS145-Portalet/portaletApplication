@@ -98,66 +98,57 @@
 
 {#if deviceArray.length==0}
 	<!-- loading eme-->
-    <div class="card preset-outlined-primary-500 mx-3 my-3 p-4">
 		<div class="flex items-center justify-center space-x-4 my-3">
 			<div class="placeholder-circle size-16 animate-pulse"></div>
 			<div class="placeholder-circle size-16 animate-pulse"></div>
 			<div class="placeholder-circle size-16 animate-pulse"></div>
 			<div class="placeholder-circle size-16 animate-pulse"></div>
 			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse hidden sm:block"></div>
+			<div class="placeholder-circle size-16 animate-pulse hidden sm:block"></div>
+			<div class="placeholder-circle size-16 animate-pulse hidden sm:block"></div>
 		</div>
-	</div>
-	<div class="card preset-outlined-primary-500 mx-3 my-3 p-4">
 		<div class="flex items-center justify-center space-x-4 my-3">
 			<div class="placeholder-circle size-16 animate-pulse"></div>
 			<div class="placeholder-circle size-16 animate-pulse"></div>
 			<div class="placeholder-circle size-16 animate-pulse"></div>
 			<div class="placeholder-circle size-16 animate-pulse"></div>
 			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse hidden sm:block"></div>
+			<div class="placeholder-circle size-16 animate-pulse hidden sm:block"></div>
+			<div class="placeholder-circle size-16 animate-pulse hidden sm:block"></div>
 		</div>
-	</div>
-	<div class="card preset-outlined-primary-500 mx-3 my-3 p-4">
 		<div class="flex items-center justify-center space-x-4 my-3">
 			<div class="placeholder-circle size-16 animate-pulse"></div>
 			<div class="placeholder-circle size-16 animate-pulse"></div>
 			<div class="placeholder-circle size-16 animate-pulse"></div>
 			<div class="placeholder-circle size-16 animate-pulse"></div>
 			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse hidden sm:block"></div>
+			<div class="placeholder-circle size-16 animate-pulse hidden sm:block"></div>
+			<div class="placeholder-circle size-16 animate-pulse hidden sm:block"></div>
 		</div>
-	</div>
-	<div class="card preset-outlined-primary-500 mx-3 my-3 p-4">
 		<div class="flex items-center justify-center space-x-4 my-3">
 			<div class="placeholder-circle size-16 animate-pulse"></div>
 			<div class="placeholder-circle size-16 animate-pulse"></div>
 			<div class="placeholder-circle size-16 animate-pulse"></div>
 			<div class="placeholder-circle size-16 animate-pulse"></div>
 			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse hidden sm:block"></div>
+			<div class="placeholder-circle size-16 animate-pulse hidden sm:block"></div>
+			<div class="placeholder-circle size-16 animate-pulse hidden sm:block"></div>
 		</div>
-	</div>
-	<div class="card preset-outlined-primary-500 mx-3 my-3 p-4">
 		<div class="flex items-center justify-center space-x-4 my-3">
 			<div class="placeholder-circle size-16 animate-pulse"></div>
 			<div class="placeholder-circle size-16 animate-pulse"></div>
 			<div class="placeholder-circle size-16 animate-pulse"></div>
 			<div class="placeholder-circle size-16 animate-pulse"></div>
 			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
+			<div class="placeholder-circle size-16 animate-pulse hidden sm:block"></div>
+			<div class="placeholder-circle size-16 animate-pulse hidden sm:block"></div>
+			<div class="placeholder-circle size-16 animate-pulse hidden sm:block"></div>
 		</div>
-	</div>
+	
 {:else}
     <div class="w-full">
     {#each filteredEntries as device}
@@ -174,16 +165,18 @@
 						</span>
             		</p>
 				</div>
-				<WaterDrop 
-					fill={WaterColor(statusMap[device.latest_status])}
-					strokeWidth={0}
-					size={30}
-				/>
+				<span class="flex">
+					<WaterDrop 
+						fill={WaterColor(statusMap[device.latest_status])}
+						strokeWidth={0}
+						size={30}
+					/>
+				</span>
 			</div>
             
 			<div class="flex justify-items-stretch">
 				<div class="grow">
-            		<button on:click={() => goToDevice(device.device_id)} class="text-xs text-primary-950 font-medium"> ...view portalet logs </button>
+            		<button on:click={() => goToDevice(device.device_id)} class="text-xs text-primary-800 font-medium"> ...view portalet logs </button>
 				</div>
 
 			</div>
@@ -209,7 +202,7 @@
 					<button on:click={() => editDevice(device.device_id)}> Edit </button>
 				</td>
 			</tr>
-		{/each}
+		{/each}<
 	</tbody>
 </table>
 
