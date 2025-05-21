@@ -11,7 +11,6 @@
 
     import WaterDrop from '@lucide/svelte/icons/droplet';
     import MapIcon from '@lucide/svelte/icons/map-pinned';
-	import SearchIcon from '@lucide/svelte/icons/search';
 
 	// Initially populated with sample data
 	let deviceArray: device[] = [];

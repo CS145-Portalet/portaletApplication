@@ -1,14 +1,21 @@
 <script lang="ts">
 	export let data: { deviceId: string };
 	import { onMount } from 'svelte';
-	import { collection, query, where, onSnapshot, doc, getDoc } from 'firebase/firestore';
-	import type { deviceLog } from '../../types.js';
+	import { collection, query, where, onSnapshot, doc, getDoc, type DocumentData } from 'firebase/firestore';
+	import type { device, deviceLog } from '../../types.js';
 	import { db } from '$lib/firebase.js';
 	import { numberToUTC } from '$lib/utils.js';
 	import { statusMap } from '$lib/constants.js';
 	import { _deleteLog } from './+page.js';
 
+	import WaterDrop from '@lucide/svelte/icons/droplet';
+    import MapIcon from '@lucide/svelte/icons/map-pinned';
+
 	let deviceNickname = '';
+	let deviceStreet = '';
+	let deviceCity = '';
+	let deviceStatus = 0;
+	let deviceCreatedDate = 0;
 	let logArray: deviceLog[] = [];
 
 	onMount(() => {
@@ -19,6 +26,10 @@
 			if (deviceTgt.exists()) {
 				const deviceData = deviceTgt.data();
 				deviceNickname = deviceData.nickname ?? 'Unknown Device';
+				deviceStreet = deviceData.street_address;
+				deviceCity = deviceData.City;
+				deviceCreatedDate = deviceData.created_at;
+
 			} else {
 				deviceNickname = 'Device Not Found';
 			}
@@ -33,6 +44,7 @@
 				const sortedLogsDesc = updatedLog.sort((a, b) => b.created_at - a.created_at);
 				logArray = sortedLogsDesc;
 				console.log('Fetched from Firestore dev log', logArray);
+				deviceStatus = logArray[0].status_int;
 			});
 
 			// Return the unsubscribe cleanup when async work is done
@@ -45,7 +57,47 @@
 
 		return () => cleanup(); // must be synchronous
 	});
+
+	function WaterColor(level: number){
+		if (level == 3){
+			return "Red"
+		}
+		else if (level == 2){
+			return "Yellow"
+		}
+		else if (logArray.length == 0){
+			return "Gray"
+		}
+		else {return "Green"}
+	}
 </script>
+
+<div class="card preset-outlined-primary-500 mx-3 my-3 p-4">
+    <div class="flex justify-items-stretch">
+		<div class="grow">
+			<p  class="font-medium text-xl mb-1">
+				{deviceNickname} 
+			</p>
+			<p class="text-sm text-gray-400 mb-2"> 
+           		<span class="flex">
+					<span class="mr-2"><MapIcon strokeWidth={1.5} size={20}/></span>
+					{deviceStreet}, {deviceCity}
+				</span>
+       		</p>
+		</div>
+		<WaterDrop 
+			fill={WaterColor(deviceStatus)}
+			strokeWidth={0}
+			size={30}
+		/>
+	</div>
+            
+	<div class="flex justify-items-stretch">
+		<div class="grow text-xs text-primary-950 font-medium">
+       		Registered {numberToUTC(deviceCreatedDate)}
+		</div>
+	</div>    
+</div>
 
 <table>
 	<thead>
