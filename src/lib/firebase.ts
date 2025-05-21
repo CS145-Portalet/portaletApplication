@@ -1,6 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { deleteApp, getApps, initializeApp, type FirebaseApp } from 'firebase/app';
 import { getAnalytics, isSupported as isAnalyticsSupported } from 'firebase/analytics';
+import { GoogleAuthProvider, getAuth } from 'firebase/auth';
 import type { Analytics } from 'firebase/analytics';
 import { getFirestore } from 'firebase/firestore';
 // TODO: Add SDKs for Firebase products that you want to use
@@ -38,8 +39,10 @@ if (!getApps().length) {
 	firebaseApp = initializeApp(firebaseConfig);
 }
 let analytics: Analytics | undefined;
-// Initialize Storage
+
 export const db = getFirestore();
+export const auth = getAuth(firebaseApp);
+export const googleProvider = new GoogleAuthProvider();
 
 if (typeof window !== 'undefined') {
 	isAnalyticsSupported().then((supported) => {
