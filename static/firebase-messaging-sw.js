@@ -2,13 +2,13 @@ importScripts('https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js
 importScripts('https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js');
 
 firebase.initializeApp({
-    apiKey: import.meta.env.VITE_API_KEY,
-    authDomain: import.meta.env.VITE_AUTH_DOMAIN,
-    projectId: import.meta.env.VITE_PROJECT_ID,
-    storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
-    messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
-    appId: import.meta.env.VITE_APP_ID,
-    measurementId: import.meta.env.VITE_MEASUREMENT_ID
+	apiKey: 'AIzaSyAiWiPp7GgMJDs0xm5B-4W8WlCfpT9qNsM',
+	authDomain: 'smart-hygiene-cubicle.firebaseapp.com',
+	projectId: 'smart-hygiene-cubicle',
+	storageBucket: 'smart-hygiene-cubicle.firebasestorage.app',
+	messagingSenderId: '557424118461',
+	appId: '1:557424118461:web:2e1a819123c25daa5cc5d4',
+	measurementId: 'G-J9ZPN5FV8R'
 });
 
 const messaging = firebase.messaging();

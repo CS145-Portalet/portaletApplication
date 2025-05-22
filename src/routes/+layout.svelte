@@ -1,16 +1,27 @@
 <script lang="ts">
 	import '../app.css';
 	import { AppBar } from '@skeletonlabs/skeleton-svelte';
-	import type { User } from 'firebase/auth';
+
 	import { auth } from '$lib/firebase.js'
 	import { authStore, authHandlers } from '../store/store.js';
 	import CirclePlus from '@lucide/svelte/icons/circle-plus';
 	import { onMount } from 'svelte';
 	let { children } = $props();
+	import { messaging } from '$lib/firebase.js'; // your firebase messaging instance
+	import { getMessaging, onMessage } from 'firebase/messaging';
+
+
+
+
 
 
 
 	onMount(() => {
+				
+		onMessage(messaging, (payload) => {
+		console.log('Message received in foreground:', payload);
+		alert(`Notification: ${payload.notification?.title}`);
+		});
 		const unsubscribe = auth.onAuthStateChanged((user) => {
 			authStore.set({ user: user ?? null }); // Shorter and same logic
 		});
@@ -25,7 +36,7 @@
 <AppBar spaceY="align-middle" background="color-surface-50">
 	{#snippet lead()}
 		<a href="/" class="hidden sm:block"> logo </a>
-		<a href="/addDevice" type="button" class="bg-surface-200 rounded-full p-1">
+		<a href="/main/addDevice" type="button" class="bg-surface-200 rounded-full p-1">
 			<CirclePlus />
 		</a>
 	{/snippet}

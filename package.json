@@ -41,6 +41,7 @@
 		"@sveltejs/vite-plugin-svelte": "^5.0.0",
 		"@tailwindcss/typography": "^0.5.15",
 		"@tailwindcss/vite": "^4.0.0",
+		"@types/mime": "^3.0.4",
 		"prettier": "^3.4.2",
 		"prettier-plugin-svelte": "^3.3.3",
 		"prettier-plugin-tailwindcss": "^0.6.11",
@@ -58,6 +59,7 @@
 		"@fontsource/poppins": "^5.2.6",
 		"@lucide/svelte": "^0.507.0",
 		"firebase": "^11.7.1",
+		"firebase-functions": "^6.3.2",
 		"lucide-svelte": "^0.507.0"
 	}
 }

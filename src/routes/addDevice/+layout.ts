@@ -4,12 +4,11 @@ import { get } from 'svelte/store';
 import { authStore } from '../../store/store.js'; // adjust path as needed
 
 export const load = async () => {
-	const user = get(authStore).user;
-	console.log(user?.displayName);
+    const user = get(authStore).user;
 
-	if (!user) {
-		throw redirect(302, '/');
-	}
+    if (!user) {
+        throw redirect(302, '/');
+    }
 
-	return { user };
+    return { user };
 };

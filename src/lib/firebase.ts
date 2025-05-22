@@ -3,7 +3,10 @@ import { deleteApp, getApps, initializeApp, type FirebaseApp } from 'firebase/ap
 import { getAnalytics, isSupported as isAnalyticsSupported } from 'firebase/analytics';
 import { GoogleAuthProvider, getAuth } from 'firebase/auth';
 import type { Analytics } from 'firebase/analytics';
+import { getMessaging, type Messaging  } from 'firebase/messaging';
 import { getFirestore } from 'firebase/firestore';
+import { browser } from '$app/environment';
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -38,12 +41,21 @@ if (!getApps().length) {
 	deleteApp(firebaseApp); // Optional if you want a fresh start
 	firebaseApp = initializeApp(firebaseConfig);
 }
-let analytics: Analytics | undefined;
+
 
 export const db = getFirestore();
 export const auth = getAuth(firebaseApp);
 export const googleProvider = new GoogleAuthProvider();
 
+let messaging :Messaging;
+
+if (browser) {
+  messaging = getMessaging(firebaseApp);
+}
+
+export {  messaging };
+
+let analytics: Analytics | undefined;
 if (typeof window !== 'undefined') {
 	isAnalyticsSupported().then((supported) => {
 		if (supported) {
