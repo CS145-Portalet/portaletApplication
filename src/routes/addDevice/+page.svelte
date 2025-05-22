@@ -39,7 +39,7 @@
 		try {
 			const devCollection = collection(db, 'device');
 			await addDoc(devCollection, deviceInfo);
-			goto('/deviceTable');
+			goto('/main');
 		} catch (error) {
 			console.log(`An error occured while creating a document ${error}`);
 		}
