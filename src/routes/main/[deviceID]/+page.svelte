@@ -81,7 +81,7 @@
 	});
 
 	function editDevice(id: string) {
-		goto(`${id}/editDevice`);
+		goto(`/main/${id}/editDevice`);
 	}
 
 	function WaterColor(level: number) {
