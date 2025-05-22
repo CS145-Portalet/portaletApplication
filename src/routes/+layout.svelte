@@ -24,7 +24,7 @@
 	{#if $authStore.user}
 <AppBar spaceY="align-middle" background="color-surface-50">
 	{#snippet lead()}
-		<a href="/" class="hidden sm:block"> logo </a>
+		<a href="/main" class="hidden sm:block"> logo </a>
 		<a href="/addDevice" type="button" class="bg-surface-200 rounded-full p-1">
 			<CirclePlus />
 		</a>
