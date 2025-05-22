@@ -38,6 +38,8 @@
 		HIGH: '3',
 	});
 	let currFilterStatus: string;
+	
+	let currSort: string = '';
 
 	onMount(() => {
 		const run = async () => {
@@ -103,6 +105,22 @@
 			organizedLogs = rawLogs.filter(
 				(log) => log.status_int == Number(currFilterStatus)
 			);
+			
+		}
+
+		sortByDate(currSort); // Apply this to persist sort
+	}
+
+	function sortByDate(sortChoice: string){
+		currSort = sortChoice
+
+		if(currSort == "dateDESC"){
+			organizedLogs = organizedLogs.sort((previousLog, nextLog) =>
+				nextLog.created_at - previousLog.created_at);
+		}
+		else{
+			organizedLogs = organizedLogs.sort((previousLog, nextLog) =>
+				previousLog.created_at - nextLog.created_at);
 		}
 	}
 
@@ -197,7 +215,17 @@
 	<thead>
 		<tr>
 			<th>Status</th>
-			<th>Created_at</th>
+			<th>Logged At
+				{#each ["dateASC", "dateDESC"] as sortChoice}
+					<button
+						type="button"
+						class={`chip capitalize ${currSort === sortChoice ? 'preset-filled-tertiary-500' : 'preset-filled-secondary-500'} `}
+						onclick={() => sortByDate(sortChoice)}
+					>
+						{sortChoice}
+					</button>
+				{/each}
+			</th>
 			<th>Actions</th>
 		</tr>
 	</thead>
