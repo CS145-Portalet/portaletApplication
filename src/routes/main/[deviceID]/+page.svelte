@@ -35,16 +35,15 @@
 	let organizedLogs: deviceLog[] = [];
 	let deviceID = '';
 
-	const Status = Object.freeze({ 
+	const Status = Object.freeze({
 		DRY: '0',
 		LOW: '1',
 		MEDIUM: '2',
-		HIGH: '3',
+		HIGH: '3'
 	});
 	let currFilterStatus: string;
-	
-	let currSort: string = 'dateDESC';
 
+	let currSort: string = 'dateDESC';
 
 	onMount(() => {
 		const run = async () => {
@@ -60,7 +59,7 @@
 			} else {
 				deviceNickname = 'Device Not Found';
 			}
-			
+
 			const q = query(collection(doc(db, 'device', data.deviceId), 'device_log'));
 			const unsubscribe = onSnapshot(q, (querySnapshot) => {
 				const updatedLog: deviceLog[] = [];
@@ -100,35 +99,30 @@
 			return 'Green';
 		}
 	}
-	
-	function filterByStatus() {
 
-		if (currFilterStatus == ''){
+	function filterByStatus() {
+		if (currFilterStatus == '') {
 			organizedLogs = rawLogs;
-		}
-		else{
-			organizedLogs = rawLogs.filter(
-				(log) => log.status_int == Number(currFilterStatus)
-			);
-			
+		} else {
+			organizedLogs = rawLogs.filter((log) => log.status_int == Number(currFilterStatus));
 		}
 
 		sortEntriesBy(currSort); // Apply this to persist sort
 	}
 
-	function sortEntriesBy(sortChoice: string){
-		currSort = sortChoice
+	function sortEntriesBy(sortChoice: string) {
+		currSort = sortChoice;
 
-		if (currSort == "dateDESC"){
-			organizedLogs = organizedLogs.sort((previousLog, nextLog) =>
-				nextLog.created_at - previousLog.created_at);
-		}
-		else if (currSort == "dateASC"){
-			organizedLogs = organizedLogs.sort((previousLog, nextLog) =>
-				previousLog.created_at - nextLog.created_at);
+		if (currSort == 'dateDESC') {
+			organizedLogs = organizedLogs.sort(
+				(previousLog, nextLog) => nextLog.created_at - previousLog.created_at
+			);
+		} else if (currSort == 'dateASC') {
+			organizedLogs = organizedLogs.sort(
+				(previousLog, nextLog) => previousLog.created_at - nextLog.created_at
+			);
 		}
 	}
-
 </script>
 
 <div>
@@ -182,42 +176,41 @@
 	<FilterIcon color="#0170f3" strokeWidth={1.5} />
 
 	<select
-		class={`chip capitalize mr-2 pr-7 ${currFilterStatus !== '' ? 'preset-filled-tertiary-500' : 'preset-filled-secondary-500'} ` }
+		class={`chip mr-2 pr-7 capitalize ${currFilterStatus !== '' ? 'preset-filled-tertiary-500' : 'preset-filled-secondary-500'} `}
 		bind:value={currFilterStatus}
 		onchange={() => filterByStatus()}
 	>
-		<option value={''}>
-			Status
-		</option>
+		<option value={''}> Status </option>
 
-		{#each Object.entries(Status) as [key, status], index(key)}
+		{#each Object.entries(Status) as [key, status], index (key)}
 			<option value={status}>
-				{key} {status}
+				{key}
+				{status}
 			</option>
 		{/each}
 	</select>
-	
-	<SortIcon color="#0170f3" strokeWidth={1.5} fill="#0170f3"/>
+
+	<SortIcon color="#0170f3" strokeWidth={1.5} fill="#0170f3" />
 
 	<button
 		type="button"
-		class={`chip capitalize ${currSort === "DateDESC" ? 'preset-filled-tertiary-500' : 'preset-filled-secondary-500'} `}
-		onclick={() => sortEntriesBy("DateDESC")}
+		class={`chip capitalize ${currSort === 'DateDESC' ? 'preset-filled-tertiary-500' : 'preset-filled-secondary-500'} `}
+		onclick={() => sortEntriesBy('DateDESC')}
 	>
-			Date <ArrowDown size={16}/>
+		Date <ArrowDown size={16} />
 	</button>
 
 	<button
 		type="button"
-		class={`chip capitalize ${currSort === "DateASC" ? 'preset-filled-tertiary-500' : 'preset-filled-secondary-500'} `}
-		onclick={() => sortEntriesBy("DateASC")}
+		class={`chip capitalize ${currSort === 'DateASC' ? 'preset-filled-tertiary-500' : 'preset-filled-secondary-500'} `}
+		onclick={() => sortEntriesBy('DateASC')}
 	>
-			Date <ArrowUp size={16}/>
+		Date <ArrowUp size={16} />
 	</button>
-
 </div>
 
-{#if rawLogs.length == 0 && deviceNickname == ""} <!-- Loading Screen -->
+{#if rawLogs.length == 0 && deviceNickname == ''}
+	<!-- Loading Screen -->
 	<div class="w-full space-y-4">
 		<div class="placeholder animate-pulse"></div>
 		<div class="placeholder animate-pulse"></div>
@@ -230,39 +223,36 @@
 		<div class="placeholder animate-pulse"></div>
 		<div class="placeholder animate-pulse"></div>
 	</div>
+{:else if rawLogs.length == 0}
+	<div class="card preset-outlined-tertiary-500 mx-3 my-1">
+		<div class="flex justify-center gap-2 px-3 py-1">
+			<WaterDrop fill="Gray" strokeWidth={0} size={25} />This device has no entries.
+		</div>
+	</div>
 {:else}
-	{#if rawLogs.length == 0}
-		<div class="card preset-outlined-tertiary-500 my-1 mx-3">
-			<div class="flex justify-center gap-2 py-1 px-3">
-				<WaterDrop fill="Gray" strokeWidth={0} size={25} />This device has no entries.
+	{#each organizedLogs as deviceLog}
+		<div class="card preset-outlined-tertiary-500 mx-3 my-1">
+			<div class="flex flex-row content-center items-center px-3 py-1">
+				<div class="flex-3 pl-5 sm:pl-10">
+					{numberToDate(deviceLog.created_at)}
+				</div>
+				<div class="flex-3">
+					{numberToTime(deviceLog.created_at)}
+				</div>
+				<div class=" flex-5">
+					<span class="flex items-center gap-2">
+						<WaterDrop fill={WaterColor(deviceLog.status_int)} strokeWidth={0} size={20} />
+						{statusMap[deviceLog.status_int]}
+					</span>
+				</div>
+				<div class="items-center pr-5 sm:pl-10">
+					<button onclick={() => _deleteLog(data.deviceId, deviceLog.log_id)}>
+						<TrashIcon strokeWidth={1.5} size={20} />
+					</button>
+				</div>
 			</div>
 		</div>
-	{:else}
-		{#each organizedLogs as deviceLog}
-			<div class="card preset-outlined-tertiary-500 my-1 mx-3">
-				<div class = "flex flex-row py-1 px-3 content-center items-center">
-					<div class="pl-5 sm:pl-10 flex-3">
-						{numberToDate(deviceLog.created_at)}
-					</div>
-					<div class="flex-3">
-						{numberToTime(deviceLog.created_at)}
-					</div>
-					<div class=" flex-5">
-						<span class="flex gap-2 items-center">
-							<WaterDrop fill={WaterColor(deviceLog.status_int)} strokeWidth={0} size={20} />
-							{statusMap[deviceLog.status_int]} 
-						</span>
-					</div>
-					<div class="items-center pr-5 sm:pl-10">
-						<button onclick={() => _deleteLog(data.deviceId, deviceLog.log_id)}> 
-							<TrashIcon strokeWidth={1.5} size={20} />
-						</button>
-					</div>
-				</div>
-
-			</div>
-		{/each}
-	{/if}
+	{/each}
 {/if}
 
 <!-- <table>

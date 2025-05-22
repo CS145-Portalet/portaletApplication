@@ -26,13 +26,9 @@
 		await updateDoc(deviceRef, deviceInfo);
 		console.log(deviceInfo);
 		console.log(deviceID);
-		
 
 		goto(`/main/${deviceID}`);
-
-
 	}
-
 </script>
 
 <main class="mt-10">

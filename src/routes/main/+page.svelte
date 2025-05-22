@@ -18,11 +18,11 @@
 	let deviceArray: device[] = [];
 	let filteredEntries: device[] = [];
 
-	const Status = Object.freeze({ 
+	const Status = Object.freeze({
 		DRY: '0',
 		LOW: '1',
 		MEDIUM: '2',
-		HIGH: '3',
+		HIGH: '3'
 	});
 	let currFilterStatus: string;
 
@@ -96,21 +96,18 @@
 	}
 
 	function filterByStatus() {
-
-		if (currFilterStatus == ''){
+		if (currFilterStatus == '') {
 			filteredEntries = deviceArray;
-		}
-		else{
+		} else {
 			filteredEntries = deviceArray.filter(
 				(device) => device.latest_status == Number(currFilterStatus)
 			);
-			
 		}
 
 		sortEntriesBy(currSort); // Apply this to persist sort
 	}
 
-	function sortEntriesBy(sortChoice: string){
+	function sortEntriesBy(sortChoice: string) {
 		currSort = sortChoice;
 
 		/*TODO sort by latest device updated 
@@ -123,17 +120,15 @@
 				previousDevice.created_at - nextDevice.created_at);
 		}*/
 
-		if (currSort == "nameASC") {
+		if (currSort == 'nameASC') {
 			filteredEntries = filteredEntries.sort((a, b) => {
 				let previous = a.nickname.toLowerCase();
 				let next = b.nickname.toLowerCase();
 				if (previous > next) return 1;
 				if (previous < next) return -1;
 				return 0;
-			}
-			);
-		}
-		else if (currSort == "nameDESC"){
+			});
+		} else if (currSort == 'nameDESC') {
 			filteredEntries = filteredEntries.sort((a, b) => {
 				let previous = a.nickname.toLowerCase();
 				let next = b.nickname.toLowerCase();
@@ -141,19 +136,17 @@
 				if (previous < next) return 1;
 				if (previous > next) return -1;
 				return 0;
-			}
+			});
+		} else if (currSort == 'statusASC') {
+			filteredEntries = filteredEntries.sort(
+				(previousDevice, nextDevice) => nextDevice.latest_status - previousDevice.latest_status
+			);
+		} else if (currSort == 'statusDESC') {
+			filteredEntries = filteredEntries.sort(
+				(previousDevice, nextDevice) => previousDevice.latest_status - nextDevice.latest_status
 			);
 		}
-		else if (currSort == "statusASC"){
-			filteredEntries = filteredEntries.sort((previousDevice, nextDevice) =>
-				nextDevice.latest_status - previousDevice.latest_status);
-		}
-		else if (currSort == "statusDESC"){
-			filteredEntries = filteredEntries.sort((previousDevice, nextDevice) =>
-				previousDevice.latest_status - nextDevice.latest_status);
-		}
 	}
-
 </script>
 
 <div
@@ -178,12 +171,11 @@
 		bind:value={currFilterStatus}
 		onchange={() => filterByStatus()}
 	>
-		<option value={''}>
-			Status
-		</option>
-		{#each Object.entries(Status) as [key, status], index(key)}
+		<option value={''}> Status </option>
+		{#each Object.entries(Status) as [key, status], index (key)}
 			<option value={status}>
-				{key} {status}
+				{key}
+				{status}
 			</option>
 		{/each}
 	</select>
@@ -192,7 +184,7 @@
 <div class="mx-3 mb-2 flex items-center gap-4">
 	<ArrowDownUp fill="#0170f3" />
 	<!-- TODO add "dateDESC", "dateASC", -->
-	{#each ["nameASC", "nameDESC", "statusASC", "statusDESC"] as sortChoice}
+	{#each ['nameASC', 'nameDESC', 'statusASC', 'statusDESC'] as sortChoice}
 		<button
 			type="button"
 			class={`chip capitalize ${currSort === sortChoice ? 'preset-filled-tertiary-500' : 'preset-filled-secondary-500'} `}
