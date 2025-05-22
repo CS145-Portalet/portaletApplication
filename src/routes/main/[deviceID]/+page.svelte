@@ -12,7 +12,7 @@
 	} from 'firebase/firestore';
 	import type { device, deviceLog } from '../../../types.js';
 	import { db } from '$lib/firebase.js';
-	import { numberToUTC } from '$lib/utils.js';
+	import { numberToDate, numberToTime, numberToUTC } from '$lib/utils.js';
 	import { statusMap } from '$lib/constants.js';
 	import { _deleteLog } from './+page.js';
 	import { goto } from '$app/navigation';
@@ -21,6 +21,10 @@
 	import MapIcon from '@lucide/svelte/icons/map-pinned';
 	import Arrow from '@lucide/svelte/icons/arrow-left';
 	import FilterIcon from '@lucide/svelte/icons/funnel';
+	import SortIcon from '@lucide/svelte/icons/arrow-down-wide-narrow';
+	import TrashIcon from '@lucide/svelte/icons/trash-2';
+	import ArrowDown from '@lucide/svelte/icons/arrow-down';
+	import ArrowUp from '@lucide/svelte/icons/arrow-up';
 
 	let deviceNickname = '';
 	let deviceStreet = '';
@@ -40,6 +44,7 @@
 	let currFilterStatus: string;
 	
 	let currSort: string = 'dateDESC';
+
 
 	onMount(() => {
 		const run = async () => {
@@ -88,7 +93,7 @@
 		if (level == 3) {
 			return 'Red';
 		} else if (level == 2) {
-			return 'Yellow';
+			return 'Orange';
 		} else if (rawLogs.length == 0) {
 			return 'Gray';
 		} else {
@@ -173,26 +178,46 @@
 	</div>
 {/if}
 
-<div class="mx-3 mb-2 flex items-center gap-4">
-	<FilterIcon fill="#0170f3" strokeWidth={0} />
+<div class="mx-3 mb-2 flex items-center gap-1">
+	<FilterIcon color="#0170f3" strokeWidth={1.5} />
 
 	<select
-		class={`chip capitalize ${currFilterStatus !== '' ? 'preset-filled-tertiary-500' : 'preset-filled-secondary-500'} `}
+		class={`chip capitalize mr-2 pr-7 ${currFilterStatus !== '' ? 'preset-filled-tertiary-500' : 'preset-filled-secondary-500'} ` }
 		bind:value={currFilterStatus}
 		onchange={() => filterByStatus()}
 	>
 		<option value={''}>
 			Status
 		</option>
+
 		{#each Object.entries(Status) as [key, status], index(key)}
 			<option value={status}>
 				{key} {status}
 			</option>
 		{/each}
 	</select>
+	
+	<SortIcon color="#0170f3" strokeWidth={1.5} fill="#0170f3"/>
+
+	<button
+		type="button"
+		class={`chip capitalize ${currSort === "DateDESC" ? 'preset-filled-tertiary-500' : 'preset-filled-secondary-500'} `}
+		onclick={() => sortEntriesBy("DateDESC")}
+	>
+			Date <ArrowDown size={16}/>
+	</button>
+
+	<button
+		type="button"
+		class={`chip capitalize ${currSort === "DateASC" ? 'preset-filled-tertiary-500' : 'preset-filled-secondary-500'} `}
+		onclick={() => sortEntriesBy("DateASC")}
+	>
+			Date <ArrowUp size={16}/>
+	</button>
+
 </div>
 
-{#if rawLogs.length == 0} <!-- Loading Screen -->
+{#if rawLogs.length == 0 && deviceNickname == ""} <!-- Loading Screen -->
 	<div class="w-full space-y-4">
 		<div class="placeholder animate-pulse"></div>
 		<div class="placeholder animate-pulse"></div>
@@ -206,12 +231,41 @@
 		<div class="placeholder animate-pulse"></div>
 	</div>
 {:else}
-	{#each organizedLogs as deviceLog}
-		<div><!--to display device logs here insead of table--></div>
-	{/each}
+	{#if rawLogs.length == 0}
+		<div class="card preset-outlined-tertiary-500 my-1 mx-3">
+			<div class="flex justify-center gap-2 py-1 px-3">
+				<WaterDrop fill="Gray" strokeWidth={0} size={25} />This device has no entries.
+			</div>
+		</div>
+	{:else}
+		{#each organizedLogs as deviceLog}
+			<div class="card preset-outlined-tertiary-500 my-1 mx-3">
+				<div class = "flex flex-row py-1 px-3 content-center items-center">
+					<div class="pl-5 sm:pl-10 flex-3">
+						{numberToDate(deviceLog.created_at)}
+					</div>
+					<div class="flex-3">
+						{numberToTime(deviceLog.created_at)}
+					</div>
+					<div class=" flex-5">
+						<span class="flex gap-2 items-center">
+							<WaterDrop fill={WaterColor(deviceLog.status_int)} strokeWidth={0} size={20} />
+							{statusMap[deviceLog.status_int]} 
+						</span>
+					</div>
+					<div class="items-center pr-5 sm:pl-10">
+						<button onclick={() => _deleteLog(data.deviceId, deviceLog.log_id)}> 
+							<TrashIcon strokeWidth={1.5} size={20} />
+						</button>
+					</div>
+				</div>
+
+			</div>
+		{/each}
+	{/if}
 {/if}
 
-<table>
+<!-- <table>
 	<thead>
 		<tr>
 			<th>Status</th>
@@ -240,9 +294,9 @@
 			</tr>
 		{/each}
 	</tbody>
-</table>
+</table> -->
 
-<style>
+<!-- <style>
 	table {
 		border-collapse: collapse;
 		width: 100%;
@@ -262,4 +316,4 @@
 	td:nth-child(2) {
 		max-width: 200px;
 	}
-</style>
+</style> -->

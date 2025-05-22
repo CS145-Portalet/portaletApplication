@@ -87,7 +87,7 @@
 		if (level == 'High') {
 			return 'Red';
 		} else if (level == 'Medium') {
-			return 'Yellow';
+			return 'Orange';
 		} else if (level == 'No Data') {
 			return 'Gray';
 		} else {
