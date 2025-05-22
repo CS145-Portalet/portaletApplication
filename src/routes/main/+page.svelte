@@ -12,7 +12,9 @@
 	import WaterDrop from '@lucide/svelte/icons/droplet';
 	import MapIcon from '@lucide/svelte/icons/map-pinned';
 	import FilterIcon from '@lucide/svelte/icons/funnel';
-	import ArrowDownUp from '@lucide/svelte/icons/arrow-down-up';
+	import SortIcon from '@lucide/svelte/icons/arrow-down-wide-narrow';
+	import ArrowDown from '@lucide/svelte/icons/arrow-down';
+	import ArrowUp from '@lucide/svelte/icons/arrow-up';
 
 	// Initially populated with sample data
 	let deviceArray: device[] = [];
@@ -108,6 +110,11 @@
 	}
 
 	function sortEntriesBy(sortChoice: string) {
+		if (currSort == sortChoice) {
+			currSort = "dateDESC";
+			return;
+		}
+
 		currSort = sortChoice;
 
 		/*TODO sort by latest device updated 
@@ -150,7 +157,7 @@
 </script>
 
 <div
-	class="bg-secondary-500 mx-3 flex grid-cols-[auto_1fr_auto] items-center space-y-4 rounded-full p-2 align-middle"
+	class="bg-secondary-500 mx-3 flex grid-cols-[auto_1fr_auto] items-center space-y-4 rounded-full p-2 align-middle mb-3"
 >
 	<input
 		type="text"
@@ -163,15 +170,16 @@
 	/>
 </div>
 
-<div class="mx-3 mb-2 flex items-center gap-4">
-	<FilterIcon fill="#0170f3" strokeWidth={0} />
+<div class="mx-3 mb-2 flex items-center gap-1">
+	<FilterIcon color="#0170f3" strokeWidth={1.5} />
 
 	<select
-		class={`chip capitalize ${currFilterStatus !== '' ? 'preset-filled-tertiary-500' : 'preset-filled-secondary-500'} `}
+		class={`chip mr-2 pr-7 capitalize ${currFilterStatus !== '' ? 'preset-filled-tertiary-500' : 'preset-filled-secondary-500'} `}
 		bind:value={currFilterStatus}
 		onchange={() => filterByStatus()}
 	>
 		<option value={''}> Status </option>
+
 		{#each Object.entries(Status) as [key, status], index (key)}
 			<option value={status}>
 				{key}
@@ -179,21 +187,43 @@
 			</option>
 		{/each}
 	</select>
+
+	<SortIcon color="#0170f3" strokeWidth={1.5} fill="#0170f3" />
+
+	<!-- TODO add "dateDESC", "dateASC", -->
+	<button
+		type="button"
+		class={`chip capitalize ${currSort === 'nameDESC' ? 'preset-filled-tertiary-500' : 'preset-filled-secondary-500'} `}
+		onclick={() => sortEntriesBy('nameDESC')}
+	>
+		Name <ArrowDown size={16} />
+	</button>
+
+	<button
+		type="button"
+		class={`chip capitalize ${currSort === 'nameASC' ? 'preset-filled-tertiary-500' : 'preset-filled-secondary-500'} `}
+		onclick={() => sortEntriesBy('nameASC')}
+	>
+		Name <ArrowUp size={16} />
+	</button>
+
+	<button
+		type="button"
+		class={`chip capitalize ${currSort === 'statusDESC' ? 'preset-filled-tertiary-500' : 'preset-filled-secondary-500'} `}
+		onclick={() => sortEntriesBy('statusDESC')}
+	>
+		Status <ArrowDown size={16} />
+	</button>
+
+	<button
+		type="button"
+		class={`chip capitalize ${currSort === 'statusASC' ? 'preset-filled-tertiary-500' : 'preset-filled-secondary-500'} `}
+		onclick={() => sortEntriesBy('statusASC')}
+	>
+		Status <ArrowUp size={16} />
+	</button>
 </div>
 
-<div class="mx-3 mb-2 flex items-center gap-4">
-	<ArrowDownUp fill="#0170f3" />
-	<!-- TODO add "dateDESC", "dateASC", -->
-	{#each ['nameASC', 'nameDESC', 'statusASC', 'statusDESC'] as sortChoice}
-		<button
-			type="button"
-			class={`chip capitalize ${currSort === sortChoice ? 'preset-filled-tertiary-500' : 'preset-filled-secondary-500'} `}
-			onclick={() => sortEntriesBy(sortChoice)}
-		>
-			{sortChoice}
-		</button>
-	{/each}
-</div>
 
 {#if deviceArray.length == 0}
 	<!-- loading eme-->
