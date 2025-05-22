@@ -31,11 +31,6 @@
 
 		goto(`/main/${deviceID}`);
 	}
-
-	async function backHandler(){
-		goto(`/main/${deviceID}`);
-		return 0;
-	}
 </script>
 
 <div>
