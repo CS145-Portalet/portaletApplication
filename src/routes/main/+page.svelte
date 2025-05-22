@@ -3,15 +3,14 @@
 
 	import { collection, query, onSnapshot, getDocs, deleteDoc } from 'firebase/firestore';
 	import { goto } from '$app/navigation';
-	import type { device, deviceLog } from '../types.js';
+	import type { device, deviceLog } from '../../types.js';
 	import { db } from '$lib/firebase.js';
 
 	import { statusMap } from '$lib/constants.js';
 	import { _deleteDevice } from './+page.js';
 
-    import WaterDrop from '@lucide/svelte/icons/droplet';
-    import MapIcon from '@lucide/svelte/icons/map-pinned';
-	import SearchIcon from '@lucide/svelte/icons/search';
+	import WaterDrop from '@lucide/svelte/icons/droplet';
+	import MapIcon from '@lucide/svelte/icons/map-pinned';
 
 	// Initially populated with sample data
 	let deviceArray: device[] = [];
@@ -64,154 +63,129 @@
 		goto(`${id}/editDevice`);
 	}
 
-	let searchTerm = "";
-	const searchEntries = () => {	
-		return filteredEntries = deviceArray.filter(device => {
+	let searchTerm = '';
+	const searchEntries = () => {
+		return (filteredEntries = deviceArray.filter((device) => {
 			let deviceName = device.nickname.toLowerCase();
-			return deviceName.includes(searchTerm.toLowerCase())
-		});
-	}
+			return deviceName.includes(searchTerm.toLowerCase());
+		}));
+	};
 
-	function WaterColor(level: string){
-		if (level == "High"){
-			return "Red"
+	function WaterColor(level: string) {
+		if (level == 'High') {
+			return 'Red';
+		} else if (level == 'Medium') {
+			return 'Yellow';
+		} else if (level == 'No Data') {
+			return 'Gray';
+		} else {
+			return 'Green';
 		}
-		else if (level == "Medium"){
-			return "Yellow"
-		}
-		else if (level == "No Data"){
-			return "Gray"
-		}
-		else {return "Green"}
 	}
 </script>
 
-<div class="flex grid-cols-[auto_1fr_auto] space-y-4 mx-3 align-middle items-center bg-secondary-500 p-2 rounded-full">
-	<input type="text" 
-		class="w-full border-0 outline-hidden ml-2 text-primary-700"
-		id="search-field" 
-		placeholder="Search by Name" 
+<div
+	class="bg-secondary-500 mx-3 flex grid-cols-[auto_1fr_auto] items-center space-y-4 rounded-full p-2 align-middle"
+>
+	<input
+		type="text"
+		class="text-primary-700 ml-2 w-full border-0 outline-hidden"
+		id="search-field"
+		placeholder="Search by Name"
 		autocomplete="off"
 		bind:value={searchTerm}
-		on:input={searchEntries} 
+		on:input={searchEntries}
 	/>
 </div>
 
-{#if deviceArray.length==0}
+{#if deviceArray.length == 0}
 	<!-- loading eme-->
-    <div class="card preset-outlined-primary-500 mx-3 my-3 p-4">
-		<div class="flex items-center justify-center space-x-4 my-3">
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-		</div>
+	<div class="my-3 flex items-center justify-center space-x-4">
+		<div class="placeholder-circle size-16 animate-pulse"></div>
+		<div class="placeholder-circle size-16 animate-pulse"></div>
+		<div class="placeholder-circle size-16 animate-pulse"></div>
+		<div class="placeholder-circle size-16 animate-pulse"></div>
+		<div class="placeholder-circle size-16 animate-pulse"></div>
+		<div class="placeholder-circle hidden size-16 animate-pulse sm:block"></div>
+		<div class="placeholder-circle hidden size-16 animate-pulse sm:block"></div>
+		<div class="placeholder-circle hidden size-16 animate-pulse sm:block"></div>
 	</div>
-	<div class="card preset-outlined-primary-500 mx-3 my-3 p-4">
-		<div class="flex items-center justify-center space-x-4 my-3">
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-		</div>
+	<div class="my-3 flex items-center justify-center space-x-4">
+		<div class="placeholder-circle size-16 animate-pulse"></div>
+		<div class="placeholder-circle size-16 animate-pulse"></div>
+		<div class="placeholder-circle size-16 animate-pulse"></div>
+		<div class="placeholder-circle size-16 animate-pulse"></div>
+		<div class="placeholder-circle size-16 animate-pulse"></div>
+		<div class="placeholder-circle hidden size-16 animate-pulse sm:block"></div>
+		<div class="placeholder-circle hidden size-16 animate-pulse sm:block"></div>
+		<div class="placeholder-circle hidden size-16 animate-pulse sm:block"></div>
 	</div>
-	<div class="card preset-outlined-primary-500 mx-3 my-3 p-4">
-		<div class="flex items-center justify-center space-x-4 my-3">
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-		</div>
+	<div class="my-3 flex items-center justify-center space-x-4">
+		<div class="placeholder-circle size-16 animate-pulse"></div>
+		<div class="placeholder-circle size-16 animate-pulse"></div>
+		<div class="placeholder-circle size-16 animate-pulse"></div>
+		<div class="placeholder-circle size-16 animate-pulse"></div>
+		<div class="placeholder-circle size-16 animate-pulse"></div>
+		<div class="placeholder-circle hidden size-16 animate-pulse sm:block"></div>
+		<div class="placeholder-circle hidden size-16 animate-pulse sm:block"></div>
+		<div class="placeholder-circle hidden size-16 animate-pulse sm:block"></div>
 	</div>
-	<div class="card preset-outlined-primary-500 mx-3 my-3 p-4">
-		<div class="flex items-center justify-center space-x-4 my-3">
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-		</div>
+	<div class="my-3 flex items-center justify-center space-x-4">
+		<div class="placeholder-circle size-16 animate-pulse"></div>
+		<div class="placeholder-circle size-16 animate-pulse"></div>
+		<div class="placeholder-circle size-16 animate-pulse"></div>
+		<div class="placeholder-circle size-16 animate-pulse"></div>
+		<div class="placeholder-circle size-16 animate-pulse"></div>
+		<div class="placeholder-circle hidden size-16 animate-pulse sm:block"></div>
+		<div class="placeholder-circle hidden size-16 animate-pulse sm:block"></div>
+		<div class="placeholder-circle hidden size-16 animate-pulse sm:block"></div>
 	</div>
-	<div class="card preset-outlined-primary-500 mx-3 my-3 p-4">
-		<div class="flex items-center justify-center space-x-4 my-3">
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-			<div class="placeholder-circle size-16 animate-pulse"></div>
-		</div>
+	<div class="my-3 flex items-center justify-center space-x-4">
+		<div class="placeholder-circle size-16 animate-pulse"></div>
+		<div class="placeholder-circle size-16 animate-pulse"></div>
+		<div class="placeholder-circle size-16 animate-pulse"></div>
+		<div class="placeholder-circle size-16 animate-pulse"></div>
+		<div class="placeholder-circle size-16 animate-pulse"></div>
+		<div class="placeholder-circle hidden size-16 animate-pulse sm:block"></div>
+		<div class="placeholder-circle hidden size-16 animate-pulse sm:block"></div>
+		<div class="placeholder-circle hidden size-16 animate-pulse sm:block"></div>
 	</div>
 {:else}
-    <div class="w-full">
-    {#each filteredEntries as device}
-        <div class="card preset-outlined-primary-500 mx-3 my-3 p-4">
-            <div class="flex justify-items-stretch">
-				<div class="grow">
-					<p  class="font-medium text-xl mb-1">
-						{device.nickname} 
-					</p>
-					<p class="text-sm text-gray-400 mb-2"> 
-                		<span class="flex">
-							<span class="mr-2"><MapIcon strokeWidth={1.5} size={20}/></span>
-							{device.street_address}, {device.city}
-						</span>
-            		</p>
-				</div>
-				<WaterDrop 
-					fill={WaterColor(statusMap[device.latest_status])}
-					strokeWidth={0}
-					size={30}
-				/>
-			</div>
-            
-			<div class="flex justify-items-stretch">
-				<div class="grow">
-            		<button on:click={() => goToDevice(device.device_id)} class="text-xs text-primary-950 font-medium"> ...view portalet logs </button>
+	<div class="w-full">
+		{#each filteredEntries as device}
+			<div class="card preset-outlined-primary-500 mx-3 my-3 p-4">
+				<div class="flex justify-items-stretch">
+					<div class="grow">
+						<p class="mb-1 text-xl font-medium">
+							{device.nickname}
+						</p>
+						<p class="mb-2 text-sm text-gray-400">
+							<span class="flex">
+								<span class="mr-2"><MapIcon strokeWidth={1.5} size={20} /></span>
+								{device.street_address}, {device.city}
+							</span>
+						</p>
+					</div>
+					<span class="flex">
+						<WaterDrop
+							fill={WaterColor(statusMap[device.latest_status])}
+							strokeWidth={0}
+							size={30}
+						/>
+					</span>
 				</div>
 
+				<div class="flex justify-items-stretch">
+					<div class="grow">
+						<button
+							on:click={() => goToDevice(device.device_id)}
+							class="text-primary-950 text-xs font-medium"
+						>
+							...view portalet logs
+						</button>
+					</div>
+				</div>
 			</div>
-        </div>
-    {/each}
-    </div>
-
-{/if}
-
-
-<!-- <table border="4" cellpadding="20" cellspacing="5">
-	<tbody>
-		{#each deviceArray as device}
-			<tr>
-				<td>{device.nickname}</td>
-				<td>{statusMap[device.latest_status]}</td>
-				<td>{device.street_address}</td>
-				<td>{device.city}</td>
-				<td>{numberToUTC(device.created_at)}</td>
-				<td>
-					<button on:click={() => goToDevice(device.device_id)}> View </button>
-
-					<button on:click={() => editDevice(device.device_id)}> Edit </button>
-				</td>
-			</tr>
 		{/each}
-	</tbody>
-</table>
-
-</style> -->
+	</div>
+{/if}
