@@ -39,7 +39,7 @@
 	});
 	let currFilterStatus: string;
 	
-	let currSort: string = '';
+	let currSort: string = 'dateDESC';
 
 	onMount(() => {
 		const run = async () => {
@@ -108,17 +108,17 @@
 			
 		}
 
-		sortByDate(currSort); // Apply this to persist sort
+		sortEntriesBy(currSort); // Apply this to persist sort
 	}
 
-	function sortByDate(sortChoice: string){
+	function sortEntriesBy(sortChoice: string){
 		currSort = sortChoice
 
-		if(currSort == "dateDESC"){
+		if (currSort == "dateDESC"){
 			organizedLogs = organizedLogs.sort((previousLog, nextLog) =>
 				nextLog.created_at - previousLog.created_at);
 		}
-		else{
+		else if (currSort == "dateASC"){
 			organizedLogs = organizedLogs.sort((previousLog, nextLog) =>
 				previousLog.created_at - nextLog.created_at);
 		}
@@ -220,7 +220,7 @@
 					<button
 						type="button"
 						class={`chip capitalize ${currSort === sortChoice ? 'preset-filled-tertiary-500' : 'preset-filled-secondary-500'} `}
-						onclick={() => sortByDate(sortChoice)}
+						onclick={() => sortEntriesBy(sortChoice)}
 					>
 						{sortChoice}
 					</button>
