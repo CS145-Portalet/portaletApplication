@@ -11,7 +11,7 @@
 	import IconX from '@lucide/svelte/icons/x';
 
 	import logo from '$lib/assets/CubimonLogo.png';
-	import text from '$lib/assets/CubimonText.png'
+	import text from '$lib/assets/CubimonText.png';
 
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
@@ -24,29 +24,27 @@
 		return unsubscribe;
 	});
 
-  	let openState = $state(false);
+	let openState = $state(false);
 
-  	function popoverClose() {
-    	openState = false;
+	function popoverClose() {
+		openState = false;
 	}
 </script>
-
-
 
 {#if $authStore.user}
 	<AppBar spaceY="align-middle" background="color-surface-50">
 		{#snippet lead()}
-			<a href="/main" class="hidden sm:block"> 
-				<div class="flex align-center">
-					<img alt="Logo" src={logo} width="52" height="40"/>
-					<img alt="Cubimon" src={text} width="127" height="35"/>
+			<a href="/main" class="hidden sm:block">
+				<div class="align-center flex">
+					<img alt="Logo" src={logo} width="52" height="40" />
+					<img alt="Cubimon" src={text} width="127" height="35" />
 				</div>
 			</a>
 		{/snippet}
 
 		{#snippet trail()}
-			<div class ="align-center">
-				<a href="/addDevice" type="button" class="bg-surface-200 rounded-full p-1 hidden sm:block">
+			<div class="align-center">
+				<a href="/addDevice" type="button" class="bg-surface-200 hidden rounded-full p-1 sm:block">
 					<CirclePlus />
 				</a>
 			</div>
@@ -64,7 +62,7 @@
 
 				{#snippet content()}
 					<header class="flex justify-between">
-						<p class="font-bold text-xl">User Info</p>
+						<p class="text-xl font-bold">User Info</p>
 
 						<button class="btn-icon hover:preset-tonal" onclick={popoverClose}>
 							<IconX />
@@ -72,22 +70,21 @@
 					</header>
 
 					<article class="flex flex-col justify-center">
-						<p>Logged in as : </p>
-						<p class="font-bold text-tertiary-500 italic">
+						<p>Logged in as :</p>
+						<p class="text-tertiary-500 font-bold italic">
 							{$authStore.user?.displayName}
 						</p>
 						<p class="text-tertiary-500 italic">
 							{$authStore.user?.email}
 						</p>
 					</article>
-					<div class = "flex flex-row items-center justify-center">
+					<div class="flex flex-row items-center justify-center">
 						<button onclick={authHandlers.logout} class="rounded-full bg-white p-2 px-3 text-black">
 							Log Out
 						</button>
 					</div>
 				{/snippet}
 			</Popover>
-
 		{/snippet}
 	</AppBar>
 {/if}

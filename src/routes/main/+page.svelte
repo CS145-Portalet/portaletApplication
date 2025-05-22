@@ -111,7 +111,7 @@
 
 	function sortEntriesBy(sortChoice: string) {
 		if (currSort == sortChoice) {
-			currSort = "dateDESC";
+			currSort = 'dateDESC';
 			return;
 		}
 
@@ -157,7 +157,7 @@
 </script>
 
 <div
-	class="bg-secondary-500 mx-3 flex grid-cols-[auto_1fr_auto] items-center space-y-4 rounded-full p-2 align-middle mb-3"
+	class="bg-secondary-500 mx-3 mb-3 flex grid-cols-[auto_1fr_auto] items-center space-y-4 rounded-full p-2 align-middle"
 >
 	<input
 		type="text"
@@ -223,7 +223,6 @@
 		Status <ArrowUp size={16} />
 	</button>
 </div>
-
 
 {#if deviceArray.length == 0}
 	<!-- loading eme-->
