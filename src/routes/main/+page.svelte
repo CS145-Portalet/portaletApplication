@@ -11,10 +11,22 @@
 
 	import WaterDrop from '@lucide/svelte/icons/droplet';
 	import MapIcon from '@lucide/svelte/icons/map-pinned';
+	import FilterIcon from '@lucide/svelte/icons/funnel';
+	import ArrowDownUp from '@lucide/svelte/icons/arrow-down-up';
 
 	// Initially populated with sample data
 	let deviceArray: device[] = [];
 	let filteredEntries: device[] = [];
+
+	const Status = Object.freeze({ 
+		DRY: '0',
+		LOW: '1',
+		MEDIUM: '2',
+		HIGH: '3',
+	});
+	let currFilterStatus: string;
+
+	let currSort: string = 'dateDESC';
 
 	onMount(() => {
 		const q = query(collection(db, 'device'));
@@ -82,6 +94,66 @@
 			return 'Green';
 		}
 	}
+
+	function filterByStatus() {
+
+		if (currFilterStatus == ''){
+			filteredEntries = deviceArray;
+		}
+		else{
+			filteredEntries = deviceArray.filter(
+				(device) => device.latest_status == Number(currFilterStatus)
+			);
+			
+		}
+
+		sortEntriesBy(currSort); // Apply this to persist sort
+	}
+
+	function sortEntriesBy(sortChoice: string){
+		currSort = sortChoice;
+
+		/*TODO sort by latest device updated 
+		if (currSort == "dateDESC"){
+			filteredEntries = filteredEntries.sort((previousDevice, nextDevice) =>
+				nextDevice.created_at - previousDevice.created_at);
+		}
+		else if (currSort == "dateASC"){
+			filteredEntries = filteredEntries.sort((previousDevice, nextDevice) =>
+				previousDevice.created_at - nextDevice.created_at);
+		}*/
+
+		if (currSort == "nameASC") {
+			filteredEntries = filteredEntries.sort((a, b) => {
+				let previous = a.nickname.toLowerCase();
+				let next = b.nickname.toLowerCase();
+				if (previous > next) return 1;
+				if (previous < next) return -1;
+				return 0;
+			}
+			);
+		}
+		else if (currSort == "nameDESC"){
+			filteredEntries = filteredEntries.sort((a, b) => {
+				let previous = a.nickname.toLowerCase();
+				let next = b.nickname.toLowerCase();
+
+				if (previous < next) return 1;
+				if (previous > next) return -1;
+				return 0;
+			}
+			);
+		}
+		else if (currSort == "statusASC"){
+			filteredEntries = filteredEntries.sort((previousDevice, nextDevice) =>
+				nextDevice.latest_status - previousDevice.latest_status);
+		}
+		else if (currSort == "statusDESC"){
+			filteredEntries = filteredEntries.sort((previousDevice, nextDevice) =>
+				previousDevice.latest_status - nextDevice.latest_status);
+		}
+	}
+
 </script>
 
 <div
@@ -94,8 +166,41 @@
 		placeholder="Search by Name"
 		autocomplete="off"
 		bind:value={searchTerm}
-		on:input={searchEntries}
+		oninput={searchEntries}
 	/>
+</div>
+
+<div class="mx-3 mb-2 flex items-center gap-4">
+	<FilterIcon fill="#0170f3" strokeWidth={0} />
+
+	<select
+		class={`chip capitalize ${currFilterStatus !== '' ? 'preset-filled-tertiary-500' : 'preset-filled-secondary-500'} `}
+		bind:value={currFilterStatus}
+		onchange={() => filterByStatus()}
+	>
+		<option value={''}>
+			Status
+		</option>
+		{#each Object.entries(Status) as [key, status], index(key)}
+			<option value={status}>
+				{key} {status}
+			</option>
+		{/each}
+	</select>
+</div>
+
+<div class="mx-3 mb-2 flex items-center gap-4">
+	<ArrowDownUp fill="#0170f3" />
+	<!-- TODO add "dateDESC", "dateASC", -->
+	{#each ["nameASC", "nameDESC", "statusASC", "statusDESC"] as sortChoice}
+		<button
+			type="button"
+			class={`chip capitalize ${currSort === sortChoice ? 'preset-filled-tertiary-500' : 'preset-filled-secondary-500'} `}
+			onclick={() => sortEntriesBy(sortChoice)}
+		>
+			{sortChoice}
+		</button>
+	{/each}
 </div>
 
 {#if deviceArray.length == 0}
@@ -178,7 +283,7 @@
 				<div class="flex justify-items-stretch">
 					<div class="grow">
 						<button
-							on:click={() => goToDevice(device.device_id)}
+							onclick={() => goToDevice(device.device_id)}
 							class="text-primary-950 text-xs font-medium"
 						>
 							...view portalet logs
