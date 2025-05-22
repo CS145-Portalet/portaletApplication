@@ -9,7 +9,7 @@ import { getFirestore } from 'firebase/firestore';
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-/*const firebaseConfig = {
+const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
   authDomain: import.meta.env.VITE_AUTH_DOMAIN,
   projectId: import.meta.env.VITE_PROJECT_ID,
@@ -17,8 +17,8 @@ import { getFirestore } from 'firebase/firestore';
   messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
   appId: import.meta.env.VITE_APP_ID,
   measurementId: import.meta.env.VITE_MEASUREMENT_ID
-};*/
-const firebaseConfig = {
+};
+/*const firebaseConfig = {
 	apiKey: 'AIzaSyAiWiPp7GgMJDs0xm5B-4W8WlCfpT9qNsM',
 	authDomain: 'smart-hygiene-cubicle.firebaseapp.com',
 	projectId: 'smart-hygiene-cubicle',
@@ -26,7 +26,7 @@ const firebaseConfig = {
 	messagingSenderId: '557424118461',
 	appId: '1:557424118461:web:2e1a819123c25daa5cc5d4',
 	measurementId: 'G-J9ZPN5FV8R'
-};
+};*/
 
 // Initialize Firebase
 let firebaseApp: FirebaseApp;

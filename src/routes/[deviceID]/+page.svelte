@@ -98,7 +98,7 @@
 </script>
 
 <div>
-	<a href="/" class="ml-3 flex"><Arrow size={25} /></a>
+	<a href="/main" class="ml-3 flex"><Arrow size={25} /></a>
 </div>
 
 {#if deviceNickname == ''}
