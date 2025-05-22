@@ -194,16 +194,16 @@
 
 	<button
 		type="button"
-		class={`chip capitalize ${currSort === 'DateDESC' ? 'preset-filled-tertiary-500' : 'preset-filled-secondary-500'} `}
-		onclick={() => sortEntriesBy('DateDESC')}
+		class={`chip capitalize ${currSort === 'dateDESC' ? 'preset-filled-tertiary-500' : 'preset-filled-secondary-500'} `}
+		onclick={() => sortEntriesBy('dateDESC')}
 	>
 		Date <ArrowDown size={16} />
 	</button>
 
 	<button
 		type="button"
-		class={`chip capitalize ${currSort === 'DateASC' ? 'preset-filled-tertiary-500' : 'preset-filled-secondary-500'} `}
-		onclick={() => sortEntriesBy('DateASC')}
+		class={`chip capitalize ${currSort === 'dateASC' ? 'preset-filled-tertiary-500' : 'preset-filled-secondary-500'} `}
+		onclick={() => sortEntriesBy('dateASC')}
 	>
 		Date <ArrowUp size={16} />
 	</button>
