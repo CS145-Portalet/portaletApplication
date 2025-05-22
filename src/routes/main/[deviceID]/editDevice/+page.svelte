@@ -26,44 +26,9 @@
 		await updateDoc(deviceRef, deviceInfo);
 		console.log(deviceInfo);
 
-		goto('/deviceTable');
+		goto('/main');
 	}
 
-	/*
-	async function createDevice() {
-		if (deviceNickname === undefined && deviceCity === undefined|| deviceNickname===""&&deviceCity==="" ||   loading === true)
-			return alert('Fields cannot be empty');
-        if (!deviceNickname || deviceNickname.trim() === "") {
-            return alert("Device nickname cannot be empty");
-        }
-        if (!deviceCity || deviceCity.trim() === "") {
-            return alert("Device city cannot be empty");
-        }
-        if (loading) {
-            return;
-        }
-
-		loading = true;
-        deviceCreatedDate=Date.now();
-		const deviceInfo = {
-			nickname: deviceNickname,
-			city: deviceCity,
-			street_address: deviceStreetAddress ,
-            created_at :deviceCreatedDate 
-
-		};
-        console.log(deviceInfo);
-
-		try {
-            const devCollection = collection(db, "device");
-			await addDoc(devCollection,deviceInfo);
-			goto('/deviceTable');
-		} catch (error) {
-			console.log(`An error occured while creating a document ${error}`);
-		}
-		loading = false
-	}
-*/
 </script>
 
 <main class="mt-10">

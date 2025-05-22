@@ -10,7 +10,7 @@
 		getDoc,
 		type DocumentData
 	} from 'firebase/firestore';
-	import type { device, deviceLog } from '../../types.js';
+	import type { device, deviceLog } from '../../../types.js';
 	import { db } from '$lib/firebase.js';
 	import { numberToUTC } from '$lib/utils.js';
 	import { statusMap } from '$lib/constants.js';
