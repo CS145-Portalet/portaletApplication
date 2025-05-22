@@ -38,8 +38,9 @@
 
 		try {
 			const devCollection = collection(db, 'device');
-			await addDoc(devCollection, deviceInfo);
-			goto('/main');
+			let newdevID= await addDoc(devCollection, deviceInfo);
+			goto(`addDevice/${newdevID.id}`)
+
 		} catch (error) {
 			console.log(`An error occured while creating a document ${error}`);
 		}
