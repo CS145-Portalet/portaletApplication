@@ -27,11 +27,19 @@
 	let deviceCity = '';
 	let deviceStatus = 0;
 	let deviceCreatedDate = 0;
-	let logArray: deviceLog[] = [];
+	let rawLogs: deviceLog[] = [];
+	let organizedLogs: deviceLog[] = [];
 	let deviceID = '';
 
-	const filters = ['filter 1', 'filter 2', 'filter 3'];
-	let status = '';
+	const Status = Object.freeze({ 
+		DRY: '0',
+		LOW: '1',
+		MEDIUM: '2',
+		HIGH: '3',
+	});
+	let currFilterStatus: string;
+	
+	let currSort: string = 'dateDESC';
 
 	onMount(() => {
 		const run = async () => {
@@ -47,7 +55,7 @@
 			} else {
 				deviceNickname = 'Device Not Found';
 			}
-
+			
 			const q = query(collection(doc(db, 'device', data.deviceId), 'device_log'));
 			const unsubscribe = onSnapshot(q, (querySnapshot) => {
 				const updatedLog: deviceLog[] = [];
@@ -55,10 +63,10 @@
 					updatedLog.push({ ...doc.data(), log_id: doc.id } as deviceLog);
 				});
 
-				const sortedLogsDesc = updatedLog.sort((a, b) => b.created_at - a.created_at);
-				logArray = sortedLogsDesc;
-				console.log('Fetched from Firestore dev log', logArray);
-				deviceStatus = logArray[0].status_int;
+				organizedLogs = updatedLog.sort((a, b) => b.created_at - a.created_at);
+				rawLogs = organizedLogs;
+				console.log('Fetched from Firestore dev log', rawLogs);
+				deviceStatus = rawLogs[0].status_int;
 			});
 
 			// Return the unsubscribe cleanup when async work is done
@@ -81,20 +89,41 @@
 			return 'Red';
 		} else if (level == 2) {
 			return 'Yellow';
-		} else if (logArray.length == 0) {
+		} else if (rawLogs.length == 0) {
 			return 'Gray';
 		} else {
 			return 'Green';
 		}
 	}
+	
+	function filterByStatus() {
 
-	function filterColor(selectedFilter: string) {
-		if (status == selectedFilter) {
-			status = '';
-		} else {
-			status = selectedFilter;
+		if (currFilterStatus == ''){
+			organizedLogs = rawLogs;
+		}
+		else{
+			organizedLogs = rawLogs.filter(
+				(log) => log.status_int == Number(currFilterStatus)
+			);
+			
+		}
+
+		sortEntriesBy(currSort); // Apply this to persist sort
+	}
+
+	function sortEntriesBy(sortChoice: string){
+		currSort = sortChoice
+
+		if (currSort == "dateDESC"){
+			organizedLogs = organizedLogs.sort((previousLog, nextLog) =>
+				nextLog.created_at - previousLog.created_at);
+		}
+		else if (currSort == "dateASC"){
+			organizedLogs = organizedLogs.sort((previousLog, nextLog) =>
+				previousLog.created_at - nextLog.created_at);
 		}
 	}
+
 </script>
 
 <div>
@@ -146,18 +175,24 @@
 
 <div class="mx-3 mb-2 flex items-center gap-4">
 	<FilterIcon fill="#0170f3" strokeWidth={0} />
-	{#each filters as filter}
-		<button
-			type="button"
-			class={`chip capitalize ${status === filter ? 'preset-filled-tertiary-500' : 'preset-filled-secondary-500'} `}
-			onclick={() => filterColor(filter)}
-		>
-			{filter}
-		</button>
-	{/each}
+
+	<select
+		class={`chip capitalize ${currFilterStatus !== '' ? 'preset-filled-tertiary-500' : 'preset-filled-secondary-500'} `}
+		bind:value={currFilterStatus}
+		onchange={() => filterByStatus()}
+	>
+		<option value={''}>
+			Status
+		</option>
+		{#each Object.entries(Status) as [key, status], index(key)}
+			<option value={status}>
+				{key} {status}
+			</option>
+		{/each}
+	</select>
 </div>
 
-{#if logArray.length == 0}
+{#if rawLogs.length == 0} <!-- Loading Screen -->
 	<div class="w-full space-y-4">
 		<div class="placeholder animate-pulse"></div>
 		<div class="placeholder animate-pulse"></div>
@@ -171,7 +206,7 @@
 		<div class="placeholder animate-pulse"></div>
 	</div>
 {:else}
-	{#each logArray as deviceLog}
+	{#each organizedLogs as deviceLog}
 		<div><!--to display device logs here insead of table--></div>
 	{/each}
 {/if}
@@ -180,12 +215,22 @@
 	<thead>
 		<tr>
 			<th>Status</th>
-			<th>Created_at</th>
+			<th>Logged At
+				{#each ["dateASC", "dateDESC"] as sortChoice}
+					<button
+						type="button"
+						class={`chip capitalize ${currSort === sortChoice ? 'preset-filled-tertiary-500' : 'preset-filled-secondary-500'} `}
+						onclick={() => sortEntriesBy(sortChoice)}
+					>
+						{sortChoice}
+					</button>
+				{/each}
+			</th>
 			<th>Actions</th>
 		</tr>
 	</thead>
 	<tbody>
-		{#each logArray as deviceLog}
+		{#each organizedLogs as deviceLog}
 			<tr>
 				<td>{statusMap[deviceLog.status_int]} ({deviceLog.status_int})</td>
 				<td>{numberToUTC(deviceLog.created_at)}</td>
