@@ -11,10 +11,19 @@
 
 	import WaterDrop from '@lucide/svelte/icons/droplet';
 	import MapIcon from '@lucide/svelte/icons/map-pinned';
+	import FilterIcon from '@lucide/svelte/icons/funnel';
 
 	// Initially populated with sample data
 	let deviceArray: device[] = [];
 	let filteredEntries: device[] = [];
+
+	const Status = Object.freeze({ 
+		DRY: '0',
+		LOW: '1',
+		MEDIUM: '2',
+		HIGH: '3',
+	});
+	let currFilterStatus: string;
 
 	onMount(() => {
 		const q = query(collection(db, 'device'));
@@ -82,6 +91,22 @@
 			return 'Green';
 		}
 	}
+
+	function filterByStatus() {
+
+		if (currFilterStatus == ''){
+			filteredEntries = deviceArray;
+		}
+		else{
+			filteredEntries = deviceArray.filter(
+				(device) => device.latest_status == Number(currFilterStatus)
+			);
+			
+		}
+
+		//sortByDate(currSort); // Apply this to persist sort
+	}
+
 </script>
 
 <div
@@ -94,8 +119,27 @@
 		placeholder="Search by Name"
 		autocomplete="off"
 		bind:value={searchTerm}
-		on:input={searchEntries}
+		oninput={searchEntries}
 	/>
+</div>
+
+<div class="mx-3 mb-2 flex items-center gap-4">
+	<FilterIcon fill="#0170f3" strokeWidth={0} />
+
+	<select
+		class={`chip capitalize ${currFilterStatus !== '' ? 'preset-filled-tertiary-500' : 'preset-filled-secondary-500'} `}
+		bind:value={currFilterStatus}
+		onchange={() => filterByStatus()}
+	>
+		<option value={''}>
+			Status
+		</option>
+		{#each Object.entries(Status) as [key, status], index(key)}
+			<option value={status}>
+				{key} {status}
+			</option>
+		{/each}
+	</select>
 </div>
 
 {#if deviceArray.length == 0}
@@ -178,7 +222,7 @@
 				<div class="flex justify-items-stretch">
 					<div class="grow">
 						<button
-							on:click={() => goToDevice(device.device_id)}
+							onclick={() => goToDevice(device.device_id)}
 							class="text-primary-950 text-xs font-medium"
 						>
 							...view portalet logs
