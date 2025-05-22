@@ -57,10 +57,10 @@
 	});
 
 	function goToDevice(id: string) {
-		goto(`${id}`);
+		goto(`main/${id}`);
 	}
 	function editDevice(id: string) {
-		goto(`${id}/editDevice`);
+		goto(`main/${id}/editDevice`);
 	}
 
 	let searchTerm = '';
