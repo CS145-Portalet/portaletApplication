@@ -5,10 +5,12 @@
 	import { auth } from '$lib/firebase.js';
 	import { authStore, authHandlers } from '../store/store.js';
 	import { Popover } from '@skeletonlabs/skeleton-svelte';
+	import { Modal } from '@skeletonlabs/skeleton-svelte';
 
 	import CirclePlus from '@lucide/svelte/icons/circle-plus';
-	import UserIcon from '@lucide/svelte/icons/user';
+	import UserIcon from '@lucide/svelte/icons/circle-user';
 	import IconX from '@lucide/svelte/icons/x';
+	import Menu from '@lucide/svelte/icons/menu';
 
 	import logo from '$lib/assets/CubimonLogo.png';
 	import text from '$lib/assets/CubimonText.png';
@@ -29,6 +31,19 @@
 	function popoverClose() {
 		openState = false;
 	}
+
+	let drawerState = $state(false);
+
+  	function drawerClose() {
+    	drawerState = false;
+	}
+
+	function goMainPage(){
+
+	}
+	function goAddDevice(){
+
+	}
 </script>
 
 {#if $authStore.user}
@@ -40,6 +55,39 @@
 					<img alt="Cubimon" src={text} width="127" height="35" />
 				</div>
 			</a>
+
+			<Modal
+				open={drawerState}
+				onOpenChange={(e) => (drawerState = e.open)}
+				triggerBase="bg-surface-200 block rounded-full p-1 sm:hidden"
+				contentBase="bg-surface-100-900 p-4 space-y-4 shadow-xl w-[480px] h-screen"
+				positionerJustify="justify-start"
+				positionerAlign=""
+				positionerPadding=""
+				transitionsPositionerIn={{ x: -480, duration: 200 }}
+				transitionsPositionerOut={{ x: -480, duration: 200 }}
+			>
+				{#snippet trigger()}
+					<Menu />
+				{/snippet}
+				{#snippet content()}
+					<header class="flex justify-between">
+					<h2 class="h2">Menu</h2>
+					</header>
+					<article class="flex flex-col gap-2">
+						<a href="/main" class="text-tertiary-500 ml-5">
+							Home Page
+						</a>
+						<a href="/addDevice" class="text-tertiary-500 ml-5">
+							Add Device
+						</a>
+						
+					
+					</article>
+				{/snippet}
+			</Modal>
+
+
 		{/snippet}
 
 		{#snippet trail()}
@@ -53,7 +101,7 @@
 				open={openState}
 				onOpenChange={(e) => (openState = e.open)}
 				positioning={{ placement: 'bottom-end' }}
-				triggerBase="bg-surface-200 p-1 rounded-full block hidden sm:block"
+				triggerBase="bg-surface-200 p-1 rounded-full block"
 				contentBase="card bg-surface-200-800 p-5 space-y-4 max-w-[320px]"
 				arrow
 				arrowBackground="!bg-surface-200 dark:!bg-surface-800"

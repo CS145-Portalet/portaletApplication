@@ -26,6 +26,8 @@
 	import ArrowDown from '@lucide/svelte/icons/arrow-down';
 	import ArrowUp from '@lucide/svelte/icons/arrow-up';
 
+	import Map from '$lib/assets/map.png';
+
 	let deviceNickname = '';
 	let deviceStreet = '';
 	let deviceCity = '';
@@ -168,6 +170,9 @@
 			>
 				Edit
 			</button>
+		</div>
+		<div class="flex flex-row items-center justify-center align-center pt-5">
+			<img alt="Cubimon Location" src={Map} />
 		</div>
 	</div>
 {/if}
