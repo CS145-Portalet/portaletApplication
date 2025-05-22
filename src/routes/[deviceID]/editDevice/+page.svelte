@@ -26,7 +26,7 @@
 		await updateDoc(deviceRef, deviceInfo);
 		console.log(deviceInfo);
 
-		goto('/deviceTable');
+		goto('/main/${deviceID}');
 	}
 
 	/*

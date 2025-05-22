@@ -73,7 +73,7 @@
 	});
 
 	function editDevice(id: string) {
-		goto(`${id}/editDevice`);
+		goto(`/main/${id}/editDevice`);
 	}
 
 	function WaterColor(level: number) {
@@ -98,7 +98,7 @@
 </script>
 
 <div>
-	<a href="/" class="ml-3 flex"><Arrow size={25} /></a>
+	<a href="/main" class="ml-3 flex"><Arrow size={25} /></a>
 </div>
 
 {#if deviceNickname == ''}
