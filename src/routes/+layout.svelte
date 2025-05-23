@@ -6,6 +6,7 @@
 	import { authStore, authHandlers } from '../store/store.js';
 	import { Popover } from '@skeletonlabs/skeleton-svelte';
 	import { Modal } from '@skeletonlabs/skeleton-svelte';
+	import { goto } from '$app/navigation';
 
 	import CirclePlus from '@lucide/svelte/icons/circle-plus';
 	import UserIcon from '@lucide/svelte/icons/circle-user';
@@ -39,10 +40,13 @@
 	}
 
 	function goMainPage(){
+		goto('/main');
+		drawerClose();
 
 	}
 	function goAddDevice(){
-
+		goto('/addDevice');
+		drawerClose();
 	}
 </script>
 
@@ -75,12 +79,12 @@
 					<h2 class="h2">Menu</h2>
 					</header>
 					<article class="flex flex-col gap-2">
-						<a href="/main" class="text-tertiary-500 ml-5">
+						<button class="text-tertiary-500 ml-5" onclick={goMainPage}>
 							Home Page
-						</a>
-						<a href="/addDevice" class="text-tertiary-500 ml-5">
+						</button>
+						<button class="text-tertiary-500 ml-5" onclick={goAddDevice}>
 							Add Device
-						</a>
+						</button>
 						
 					
 					</article>
