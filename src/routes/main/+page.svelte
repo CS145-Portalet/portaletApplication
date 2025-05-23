@@ -117,16 +117,6 @@
 
 		currSort = sortChoice;
 
-		/*TODO sort by latest device updated 
-		if (currSort == "dateDESC"){
-			filteredEntries = filteredEntries.sort((previousDevice, nextDevice) =>
-				nextDevice.created_at - previousDevice.created_at);
-		}
-		else if (currSort == "dateASC"){
-			filteredEntries = filteredEntries.sort((previousDevice, nextDevice) =>
-				previousDevice.created_at - nextDevice.created_at);
-		}*/
-
 		if (currSort == 'nameASC') {
 			filteredEntries = filteredEntries.sort((a, b) => {
 				let previous = a.nickname.toLowerCase();
@@ -145,9 +135,19 @@
 				return 0;
 			});
 		} else if (currSort == 'statusASC') {
+			// Wonky Solution For Empty Status Value Which Sorts Wrongly
+			filteredEntries.map((device) => {
+				device.latest_status = (device.latest_status === 4) ? -1 : device.latest_status;
+			});
+
 			filteredEntries = filteredEntries.sort(
 				(previousDevice, nextDevice) => nextDevice.latest_status - previousDevice.latest_status
 			);
+
+			// Reverse Wonky Solution
+			filteredEntries.map((device) => {
+				device.latest_status = (device.latest_status === -1) ? 4 : device.latest_status;
+			});
 		} else if (currSort == 'statusDESC') {
 			filteredEntries = filteredEntries.sort(
 				(previousDevice, nextDevice) => previousDevice.latest_status - nextDevice.latest_status
@@ -190,7 +190,6 @@
 
 	<SortIcon color="#0170f3" strokeWidth={1.5} fill="#0170f3" />
 
-	<!-- TODO add "dateDESC", "dateASC", -->
 	<button
 		type="button"
 		class={`chip capitalize ${currSort === 'nameDESC' ? 'preset-filled-tertiary-500' : 'preset-filled-secondary-500'} `}
@@ -279,7 +278,9 @@
 {:else}
 	<div class="w-full">
 		{#each filteredEntries as device}
-			<div class="card preset-outlined-primary-500 mx-3 my-3 p-4">
+			<div class={`card mx-3 my-3 p-4 transition
+			${device.latest_status == 3 ? "outline-1 outline-red-500 shadow-lg shadow-red-500 bg-red-50" : 'preset-outlined-primary-500 '}	
+			`}>
 				<div class="flex justify-items-stretch">
 					<div class="grow">
 						<p class="mb-1 text-xl font-medium">
